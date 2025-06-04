@@ -1,0 +1,695 @@
+table 'Qualtrics HCA Clinical'
+	lineageTag: d09ca8c5-c160-45e8-96c5-1f576babeff3
+
+	measure 'Avg Likart HCA_CurrentQuarter' = ```
+			
+			VAR currdate = TODAY()
+			VAR LastGroundTerm =
+			    
+			    CALCULATETABLE(
+			        FILTER(
+			            'Dim_Terms',
+			            'Dim_Terms'[Modality] = "Ground" &&
+			            'Dim_Terms'[Term_Start_Date] <= currdate &&
+			            'Dim_Terms'[Term_End_Date] >= currdate
+			        )
+			    )
+			    
+			VAR StartDate = MAXX(LastGroundTerm, 'Dim_Terms'[Term_Start_Date])
+			VAR EndDate = MAXX(LastGroundTerm, 'Dim_Terms'[Term_End_Date])
+			RETURN
+			COALESCE(
+			    CALCULATE(
+			        AVERAGEX(
+			            FILTER(
+			                'Qualtrics HCA Clinical',
+			                'Qualtrics HCA Clinical'[RecordedDate] >= StartDate &&
+			                'Qualtrics HCA Clinical'[RecordedDate] <= EndDate &&
+			                'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain" &&
+			                'Qualtrics HCA Clinical'[Q13] = "Student" &&
+			                'Qualtrics HCA Clinical'[Finished] = "True" &&
+			                NOT(ISBLANK('Qualtrics HCA Clinical'[Q22_1]))
+			            ),
+			            VALUE('Qualtrics HCA Clinical'[Q22_1])
+			        )
+			    ),
+			    0
+			)
+			// VAR CurrDate = TODAY()
+			// VAR CurrYear = YEAR(CurrDate)
+			// VAR CurrMonth = MONTH(CurrDate)
+			
+			// -- Determine the start and end date of the current quarter
+			// VAR StartDate =
+			//     SWITCH(
+			//         TRUE(),
+			//         CurrMonth >= 1 && CurrMonth <= 3, DATE(CurrYear, 1, 1),     -- Q1
+			//         CurrMonth >= 4 && CurrMonth <= 6, DATE(CurrYear, 4, 1),     -- Q2
+			//         CurrMonth >= 7 && CurrMonth <= 9, DATE(CurrYear, 7, 1),     -- Q3
+			//         CurrMonth >= 10 && CurrMonth <= 12, DATE(CurrYear, 10, 1)   -- Q4
+			//     )
+			
+			// VAR EndDate =
+			//     SWITCH(
+			//         TRUE(),
+			//         CurrMonth >= 1 && CurrMonth <= 3, DATE(CurrYear, 3, 31),     -- Q1
+			//         CurrMonth >= 4 && CurrMonth <= 6, DATE(CurrYear, 6, 30),     -- Q2
+			//         CurrMonth >= 7 && CurrMonth <= 9, DATE(CurrYear, 9, 30),     -- Q3
+			//         CurrMonth >= 10 && CurrMonth <= 12, DATE(CurrYear, 12, 31)   -- Q4
+			//     )
+			
+			// RETURN
+			// COALESCE(
+			//     CALCULATE(
+			//         AVERAGEX(
+			//             FILTER(
+			//                 'Qualtrics HCA Clinical',
+			//                 'Qualtrics HCA Clinical'[RecordedDate] >= StartDate &&
+			//                 'Qualtrics HCA Clinical'[RecordedDate] <= EndDate &&
+			//                 'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain" &&
+			//                 'Qualtrics HCA Clinical'[Q13] = "Student" &&
+			//                 'Qualtrics HCA Clinical'[Finished] = "True" &&
+			//                 NOT(ISBLANK('Qualtrics HCA Clinical'[Q22_1]))
+			//             ),
+			//             VALUE('Qualtrics HCA Clinical'[Q22_1])
+			//         )
+			//     ),
+			//     0
+			// )
+			
+			```
+		formatString: 0.0
+		lineageTag: 7d0fd1c3-8d5e-4d8a-a91c-a9ec6d79dc92
+
+	measure 'HCA Ratings_CurrentQuarter' = ```
+			
+			VAR currdate = TODAY()
+			VAR CurrentGroundTerm =
+			    CALCULATETABLE(
+			        TOPN(
+			            1,
+			            FILTER(
+			                'Dim_Terms',
+			                'Dim_Terms'[Modality] = "Ground" &&
+			                'Dim_Terms'[Term_Start_Date] <= currdate &&
+			                'Dim_Terms'[Term_End_Date] >= currdate
+			            ),
+			            'Dim_Terms'[Term_Start_Date], ASC
+			        )
+			    )
+			VAR StartDate = MAXX(CurrentGroundTerm, 'Dim_Terms'[Term_Start_Date])
+			VAR EndDate = MAXX(CurrentGroundTerm, 'Dim_Terms'[Term_End_Date])
+			
+			RETURN
+			COALESCE(
+			    CALCULATE(
+			        DISTINCTCOUNT('Qualtrics HCA Clinical'[ResponseId]),
+			        FILTER(
+			            'Qualtrics HCA Clinical',
+			            'Qualtrics HCA Clinical'[RecordedDate] >= StartDate &&
+			            'Qualtrics HCA Clinical'[RecordedDate] <= EndDate &&
+			            'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain" &&
+			            'Qualtrics HCA Clinical'[Q13] = "Student" &&
+			            'Qualtrics HCA Clinical'[Finished] = "True"
+			        )
+			    ),
+			    0
+			)
+			
+			
+			// VAR CurrDate = TODAY()
+			// VAR CurrYear = YEAR(CurrDate)
+			// VAR CurrMonth = MONTH(CurrDate)
+			
+			// VAR StartDate =
+			//     SWITCH(
+			//         TRUE(),
+			//         CurrMonth >= 1 && CurrMonth <= 3, DATE(CurrYear, 1, 1),     -- Q1
+			//         CurrMonth >= 4 && CurrMonth <= 6, DATE(CurrYear, 4, 1),     -- Q2
+			//         CurrMonth >= 7 && CurrMonth <= 9, DATE(CurrYear, 7, 1),     -- Q3
+			//         CurrMonth >= 10 && CurrMonth <= 12, DATE(CurrYear, 10, 1)   -- Q4
+			//     )
+			
+			// VAR EndDate =
+			//     SWITCH(
+			//         TRUE(),
+			//         CurrMonth >= 1 && CurrMonth <= 3, DATE(CurrYear, 3, 31),     -- Q1
+			//         CurrMonth >= 4 && CurrMonth <= 6, DATE(CurrYear, 6, 30),     -- Q2
+			//         CurrMonth >= 7 && CurrMonth <= 9, DATE(CurrYear, 9, 30),     -- Q3
+			//         CurrMonth >= 10 && CurrMonth <= 12, DATE(CurrYear, 12, 31)   -- Q4
+			//     )
+			
+			// RETURN
+			// COALESCE(
+			//     CALCULATE(
+			//         DISTINCTCOUNT('Qualtrics HCA Clinical'[ResponseId]),
+			//         FILTER(
+			//             'Qualtrics HCA Clinical',
+			//             'Qualtrics HCA Clinical'[RecordedDate] >= StartDate &&
+			//             'Qualtrics HCA Clinical'[RecordedDate] <= EndDate &&
+			//             'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain" &&
+			//             'Qualtrics HCA Clinical'[Q13] = "Student" &&
+			//             'Qualtrics HCA Clinical'[Finished] = "True"
+			//         )
+			//     ),
+			//     0
+			// )
+			
+			```
+		formatString: 0
+		lineageTag: 834b4c78-3b4e-4d24-bb10-16331e74b4ed
+
+	measure 'Total HCA Ratings' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT('Qualtrics HCA Clinical'[ResponseId]),
+			    FILTER(
+			        'Qualtrics HCA Clinical',
+			        'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain" &&
+			        'Qualtrics HCA Clinical'[Q13] = "Student" &&
+			        'Qualtrics HCA Clinical'[Finished] = "True"
+			    )
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 45c8ffde-610f-4dc9-8efe-27f7abaff61f
+
+	measure Current_Term% =
+			
+			DIVIDE(
+			    'Qualtrics HCA Clinical'[HCA Ratings_CurrentQuarter],
+			    [Sum Population Current Ground Term],
+			    0
+			)
+			
+			//DIVIDE('Qualtrics HCA Clinical'[HCA Ratings_CurrentQuarter],[Sum Population Current Ground Term])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 085e5bbd-e827-4ff1-9eeb-0c0ec2dbe960
+
+	measure 'HCA Ratings_ExceptCurrentTerm' = ```
+			
+			VAR currdate = TODAY()
+			
+			-- Get the last ground term (i.e., current term to exclude)
+			VAR LastGroundTerm =
+			    CALCULATETABLE(
+			        TOPN(
+			            1,
+			            FILTER(
+			                'Dim_Terms',
+			                'Dim_Terms'[Modality] = "Ground" &&
+			                'Dim_Terms'[Term_End_Date] < currdate
+			            ),
+			            'Dim_Terms'[Term_End_Date], DESC
+			        )
+			    )
+			
+			VAR StartDate = MAXX(LastGroundTerm, 'Dim_Terms'[Term_Start_Date])
+			VAR EndDate = MAXX(LastGroundTerm, 'Dim_Terms'[Term_End_Date])
+			
+			RETURN
+			CALCULATE(
+			    DISTINCTCOUNT('Qualtrics HCA Clinical'[ResponseId]),
+			    'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain",
+			    'Qualtrics HCA Clinical'[Q13] = "Student",
+			    'Qualtrics HCA Clinical'[Finished] = "True",
+			    NOT (
+			        'Qualtrics HCA Clinical'[RecordedDate] >= StartDate &&
+			        'Qualtrics HCA Clinical'[RecordedDate] <= EndDate
+			    )
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 34e10d75-5025-4378-9d3d-706075aa0736
+
+	measure 'Avg Percentage HCA Ratings' = ```
+			
+			VAR Ratings = [HCA Ratings_ExceptCurrentTerm]
+			VAR Population = [Sum Population Except Current Term]
+			RETURN
+			DIVIDE(Ratings, Population, 0)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 82aec61e-cce0-403f-84f6-404acbb6df34
+
+	measure 'HCA Ratings_LastYear' = ```
+			
+			VAR CurrYear = YEAR(TODAY())
+			VAR StartDate = DATE(CurrYear - 1, 1, 1)  -- Jan 1 of last year
+			VAR EndDate = DATE(CurrYear - 1, 12, 31)  -- Dec 31 of last year
+			
+			RETURN
+			CALCULATE(
+			    DISTINCTCOUNT('Qualtrics HCA Clinical'[ResponseId]),
+			    'Qualtrics HCA Clinical'[HCA Flag] = "HCA contain",
+			    'Qualtrics HCA Clinical'[Q13] = "Student",
+			    'Qualtrics HCA Clinical'[Finished] = "True",
+			    'Qualtrics HCA Clinical'[RecordedDate] >= StartDate,
+			    'Qualtrics HCA Clinical'[RecordedDate] <= EndDate
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 11d3b8d0-7bfd-4c77-9d1f-82c4de70e97b
+
+	measure Prior_Year% = ```
+			
+			DIVIDE(
+			    COALESCE([HCA Ratings_LastYear], 0),
+			    COALESCE([Sum Population Last Year], 0),
+			    0
+			)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: b9bb29c3-7760-419b-b9f5-3963f431e2de
+
+	measure HCAFontColor1 = ```
+			
+			IF(
+			    [Current_Term%] < [Prior_Year%],
+			    "#C00000",  -- Dark Red
+			    "#000000"   -- Black (default)
+			)
+			
+			```
+		lineageTag: e7ba5f3e-8dbf-409d-a170-b66ef289e41d
+
+	column StartDate
+		dataType: string
+		lineageTag: 695f5140-66df-4fe0-921c-a9608c12202e
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndDate
+		dataType: string
+		lineageTag: 9a58b5ac-9e67-4d46-b26d-c20724420650
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Progress
+		dataType: string
+		lineageTag: bd44f5e1-874d-4e8b-91bd-47b26c92d4f6
+		summarizeBy: none
+		sourceColumn: Progress
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (in seconds)'
+		dataType: string
+		lineageTag: 0bfd7b26-d7c5-490e-a4d3-7039d7e6ec03
+		summarizeBy: none
+		sourceColumn: Duration (in seconds)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Finished
+		dataType: string
+		lineageTag: 4fef3a67-d7ca-4e85-85df-c8a396b08917
+		summarizeBy: none
+		sourceColumn: Finished
+
+		annotation SummarizationSetBy = Automatic
+
+	column RecordedDate
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: 427ea31d-a984-43a0-a18c-cee4f43932c0
+		summarizeBy: none
+		sourceColumn: RecordedDate
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column ResponseId
+		dataType: string
+		lineageTag: eac7213a-69f8-492a-b996-5ace323dd205
+		summarizeBy: none
+		sourceColumn: ResponseId
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExternalReference
+		dataType: string
+		lineageTag: 476f2ea4-e136-4b09-b14b-a906f799b300
+		summarizeBy: none
+		sourceColumn: ExternalReference
+
+		annotation SummarizationSetBy = Automatic
+
+	column DistributionChannel
+		dataType: string
+		lineageTag: bd3e54b5-bcbb-417d-9623-fb72eb460fd6
+		summarizeBy: none
+		sourceColumn: DistributionChannel
+
+		annotation SummarizationSetBy = Automatic
+
+	column UserLanguage
+		dataType: string
+		lineageTag: 11ff6cb0-b59c-4410-8739-f7782081085b
+		summarizeBy: none
+		sourceColumn: UserLanguage
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q69
+		dataType: string
+		lineageTag: 171327a3-f636-4d28-a620-b4ccc94a984b
+		summarizeBy: none
+		sourceColumn: Q69
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q13
+		dataType: string
+		lineageTag: 3431a98f-4b3b-4cad-97fa-2227009e46a3
+		summarizeBy: none
+		sourceColumn: Q13
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q17
+		dataType: string
+		lineageTag: 604f5531-cb28-4b9b-b35f-eeb04bff1764
+		summarizeBy: none
+		sourceColumn: Q17
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q19
+		dataType: string
+		lineageTag: 2a0af9b2-ba1c-4763-8807-668fc98f671f
+		summarizeBy: none
+		sourceColumn: Q19
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q20
+		dataType: string
+		lineageTag: 5858cdaf-53c6-4290-8122-4e1f04900ada
+		summarizeBy: none
+		sourceColumn: Q20
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q29
+		dataType: string
+		lineageTag: b9d00f2f-0e66-4ff2-b6aa-33be9383eb02
+		summarizeBy: none
+		sourceColumn: Q29
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q22_1
+		dataType: string
+		lineageTag: 6658e546-9bfd-40e5-a147-c8e5bcaba1b6
+		summarizeBy: none
+		sourceColumn: Q22_1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q30
+		dataType: string
+		lineageTag: be6fadb6-72ab-483f-a32a-4d523a374e9f
+		summarizeBy: none
+		sourceColumn: Q30
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q50
+		dataType: string
+		lineageTag: eb748ff4-ac56-4786-984e-305a2597bf4a
+		summarizeBy: none
+		sourceColumn: Q50
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q18
+		dataType: string
+		lineageTag: a6682dcc-c996-4d65-ab6a-cc4909832141
+		summarizeBy: none
+		sourceColumn: Q18
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q31
+		dataType: string
+		lineageTag: 48090eca-b3d4-4d65-859c-45406dc955ca
+		summarizeBy: none
+		sourceColumn: Q31
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q52
+		dataType: string
+		lineageTag: 786b1f8d-a7b1-4dd4-85ef-836b89c12234
+		summarizeBy: none
+		sourceColumn: Q52
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q53
+		dataType: string
+		lineageTag: f8b59dfe-b9f7-4175-b523-6d65f90d8414
+		summarizeBy: none
+		sourceColumn: Q53
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q54
+		dataType: string
+		lineageTag: 7c447474-62c9-48da-aeb6-9f1bbcc9b9c6
+		summarizeBy: none
+		sourceColumn: Q54
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q55
+		dataType: string
+		lineageTag: 325b683f-bd0c-4216-a51b-911294a07890
+		summarizeBy: none
+		sourceColumn: Q55
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q56
+		dataType: string
+		lineageTag: 6dbf0918-51c7-4c3f-8ba8-3cedfae4b5cd
+		summarizeBy: none
+		sourceColumn: Q56
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q57
+		dataType: string
+		lineageTag: 004dd8c4-266c-4a6a-b011-17ff0a96eb3c
+		summarizeBy: none
+		sourceColumn: Q57
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q32
+		dataType: string
+		lineageTag: 9638d78d-4e50-4c32-9813-48e0c9b9dbdf
+		summarizeBy: none
+		sourceColumn: Q32
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q58
+		dataType: string
+		lineageTag: d915cf5a-60e8-4a0a-8ab0-c523436ac412
+		summarizeBy: none
+		sourceColumn: Q58
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q59
+		dataType: string
+		lineageTag: c8af5303-cb02-49ca-b28d-bddbc478e254
+		summarizeBy: none
+		sourceColumn: Q59
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q60
+		dataType: string
+		lineageTag: 24ab7f1e-ce4e-4c60-9a98-94fbbc9ff9bb
+		summarizeBy: none
+		sourceColumn: Q60
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q49
+		dataType: string
+		lineageTag: 134c1271-13a9-4014-adfe-05457c7ff056
+		summarizeBy: none
+		sourceColumn: Q49
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q61
+		dataType: string
+		lineageTag: c4151415-6dcf-40e2-a78d-978fa31fcb4f
+		summarizeBy: none
+		sourceColumn: Q61
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q62
+		dataType: string
+		lineageTag: 2366bcb4-51d1-4f54-839b-94f29cd834da
+		summarizeBy: none
+		sourceColumn: Q62
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q63
+		dataType: string
+		lineageTag: f297e84f-e7a0-4658-89fe-1c4d0abfafe6
+		summarizeBy: none
+		sourceColumn: Q63
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q64
+		dataType: string
+		lineageTag: 965d5e47-fa15-40c1-8c35-ccfc57458caa
+		summarizeBy: none
+		sourceColumn: Q64
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q65
+		dataType: string
+		lineageTag: d4517be7-0caf-48bb-9118-f62e06293362
+		summarizeBy: none
+		sourceColumn: Q65
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q66
+		dataType: string
+		lineageTag: cec0e630-41e9-4bf8-b068-94f54f533bb7
+		summarizeBy: none
+		sourceColumn: Q66
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q67
+		dataType: string
+		lineageTag: 64680f28-9411-4838-a5ad-5edfcbe808c4
+		summarizeBy: none
+		sourceColumn: Q67
+
+		annotation SummarizationSetBy = Automatic
+
+	column Q68
+		dataType: string
+		lineageTag: bdf58ebb-653e-4869-b059-96064f146a13
+		summarizeBy: none
+		sourceColumn: Q68
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'HCA Flag' = ```
+			
+			VAR Q18 = UPPER(TRIM('Qualtrics HCA Clinical'[Q18]))
+			VAR Q31 = UPPER(TRIM('Qualtrics HCA Clinical'[Q31]))
+			VAR Q32 = UPPER(TRIM('Qualtrics HCA Clinical'[Q32]))
+			VAR Q49 = UPPER(TRIM('Qualtrics HCA Clinical'[Q49]))
+			VAR Q52 = UPPER(TRIM('Qualtrics HCA Clinical'[Q52]))
+			VAR Q53 = UPPER(TRIM('Qualtrics HCA Clinical'[Q53]))
+			VAR Q54 = UPPER(TRIM('Qualtrics HCA Clinical'[Q54]))
+			VAR Q55 = UPPER(TRIM('Qualtrics HCA Clinical'[Q55]))
+			VAR Q56 = UPPER(TRIM('Qualtrics HCA Clinical'[Q56]))
+			VAR Q57 = UPPER(TRIM('Qualtrics HCA Clinical'[Q57]))
+			VAR Q58 = UPPER(TRIM('Qualtrics HCA Clinical'[Q58]))
+			VAR Q59 = UPPER(TRIM('Qualtrics HCA Clinical'[Q59]))
+			VAR Q60 = UPPER(TRIM('Qualtrics HCA Clinical'[Q60]))
+			VAR Q61 = UPPER(TRIM('Qualtrics HCA Clinical'[Q61]))
+			VAR Q62 = UPPER(TRIM('Qualtrics HCA Clinical'[Q62]))
+			VAR Q63 = UPPER(TRIM('Qualtrics HCA Clinical'[Q63]))
+			VAR Q64 = UPPER(TRIM('Qualtrics HCA Clinical'[Q64]))
+			VAR Q65 = UPPER(TRIM('Qualtrics HCA Clinical'[Q65]))
+			VAR Q66 = UPPER(TRIM('Qualtrics HCA Clinical'[Q66]))
+			VAR Q67 = UPPER(TRIM('Qualtrics HCA Clinical'[Q67]))
+			VAR Q68 = UPPER(TRIM('Qualtrics HCA Clinical'[Q68]))
+			
+			VAR MatchFound = 
+			    CONTAINSSTRING(" " & Q18 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q31 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q32 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q49 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q52 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q53 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q54 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q55 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q56 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q57 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q58 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q59 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q60 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q61 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q62 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q63 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q64 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q65 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q66 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q67 & " ", " HCA ") ||
+			    CONTAINSSTRING(" " & Q68 & " ", " HCA ")
+			
+			RETURN
+			    IF(MatchFound, "HCA contain", BLANK())
+			
+			```
+		lineageTag: 8b5a4081-30a9-446e-9556-5ec2ccc68a33
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campus = ```
+			LEFT('Qualtrics HCA Clinical'[Q17], 3)
+			
+			```
+		lineageTag: 2644a216-ecca-4d33-a120-0186673f3545
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Campus Name' = ```
+			'Qualtrics HCA Clinical'[Q17] & " Campus"
+			
+			```
+		lineageTag: 2d710456-8cd0-4163-bda2-856035f4f965
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Qualtrics HCA Clinical' = m
+		mode: import
+		source =
+				let
+				    Query5 = GetQualtricsSurveyDataLabeled("SV_bdBQj5H7r93Fhcy", true),
+				    #"Promoted Headers" = Table.PromoteHeaders(Query5, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"StartDate", type text}, {"EndDate", type text}, {"Status", type text}, {"IPAddress", type text}, {"Progress", type text}, {"Duration (in seconds)", type text}, {"Finished", type text}, {"RecordedDate", type text}, {"ResponseId", type text}, {"RecipientLastName", type text}, {"RecipientFirstName", type text}, {"RecipientEmail", type text}, {"ExternalReference", type text}, {"LocationLatitude", type text}, {"LocationLongitude", type text}, {"DistributionChannel", type text}, {"UserLanguage", type text}, {"Q69", type text}, {"Q13", type text}, {"Q17", type text}, {"Q18", type text}, {"Q31", type text}, {"Q52", type text}, {"Q53", type text}, {"Q54", type text}, {"Q55", type text}, {"Q56", type text}, {"Q57", type text}, {"Q32", type text}, {"Q58", type text}, {"Q59", type text}, {"Q60", type text}, {"Q49", type text}, {"Q61", type text}, {"Q62", type text}, {"Q63", type text}, {"Q64", type text}, {"Q65", type text}, {"Q66", type text}, {"Q67", type text}, {"Q68", type text}, {"Q19", type text}, {"Q20", type text}, {"Q29", type text}, {"Q22_1", type text}, {"Q30", type text}, {"Q50", type text}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",2),
+				    #"Removed Columns" = Table.RemoveColumns(#"Removed Top Rows",{"Status", "IPAddress", "RecipientLastName", "RecipientFirstName", "RecipientEmail", "LocationLatitude", "LocationLongitude"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

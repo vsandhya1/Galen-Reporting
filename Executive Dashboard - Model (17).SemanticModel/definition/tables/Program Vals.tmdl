@@ -1,0 +1,46 @@
+table 'Program Vals'
+	lineageTag: d2ffa72b-f5bf-45dc-a976-332e7d8e99fb
+
+	column PROGRAM_DROPDOWN
+		dataType: string
+		lineageTag: 74209cb2-c267-4632-acba-758d4f237b91
+		summarizeBy: none
+		sourceColumn: PROGRAM_DROPDOWN
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACAD_PROGRAMS_ID
+		dataType: string
+		lineageTag: e806f983-82dc-40dc-a955-7eecd3b50b80
+		summarizeBy: none
+		sourceColumn: ACAD_PROGRAMS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACPG_TITLE
+		dataType: string
+		lineageTag: 9bd7a71b-b59d-461f-8a94-4f37f61c2124
+		summarizeBy: none
+		sourceColumn: ACPG_TITLE
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramClassClimate = SWITCH('Program Vals'[PROGRAM_DROPDOWN],"ADN 2-Year","ADN","ADN Bridge","ADN",[PROGRAM_DROPDOWN])
+		lineageTag: c82895ff-649e-499e-a95e-ad250cb73841
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Program Vals' = m
+		mode: import
+		queryGroup: Dimensions
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="SELECT V.VAL_EXTERNAL_REPRESENTATION PROGRAM_DROPDOWN, AP.ACAD_PROGRAMS_ID, ACPG_TITLE #(lf)FROM ACAD_PROGRAMS AP#(lf)INNER JOIN ACAD_PROGRAMS_LS APLS ON AP.ACAD_PROGRAMS_ID = APLS.ACAD_PROGRAMS_ID #(lf)INNER JOIN VALS V ON APLS.ACPG_TYPES = V.VAL_INTERNAL_CODE AND V.VALCODE_ID = 'ACAD.PROGRAM.TYPES'#(lf)"])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,102 @@
+table FACT_Construction
+	lineageTag: 739698b4-1f70-42ab-a647-e96b808fd1b8
+
+	column Campus
+		dataType: string
+		lineageTag: ebd126c0-c697-4478-a1af-bab57bbfb0ed
+		summarizeBy: none
+		sourceColumn: Campus
+		sortByColumn: Order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Construction type'
+		dataType: string
+		lineageTag: 5145399f-0b96-412d-b749-2d6b7029b2c1
+		summarizeBy: none
+		sourceColumn: Construction type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start date'
+		dataType: string
+		lineageTag: 313ac92c-7fb4-4d34-920c-f32fb10cdd67
+		summarizeBy: none
+		sourceColumn: Start date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Schedule status'
+		dataType: string
+		lineageTag: bbe984cd-7faf-49f8-9603-1457296c5071
+		summarizeBy: none
+		sourceColumn: Schedule status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Budget tracking'
+		dataType: string
+		lineageTag: 203d24e4-5067-48a7-b629-451d3c515963
+		summarizeBy: none
+		sourceColumn: Budget tracking
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Courses offered'
+		dataType: string
+		lineageTag: fda64940-41aa-4820-9570-7ab6efb62749
+		summarizeBy: none
+		sourceColumn: Courses offered
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Schedule Color'
+		dataType: string
+		lineageTag: 4a1add62-0295-4950-ae0d-12f596dc9820
+		summarizeBy: none
+		sourceColumn: Schedule Color
+
+		annotation SummarizationSetBy = Automatic
+
+	column Order
+		dataType: string
+		lineageTag: 6b561a2d-974a-4afc-b428-fe5273af8cea
+		summarizeBy: none
+		sourceColumn: Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Budget Color' = SWITCH(TRUE(),ISERROR(VALUE([Budget tracking])),BLANK(),VALUE(FACT_Construction[Budget tracking])<.9,"Green",VALUE(FACT_Construction[Budget tracking])>=.9 && VALUE(FACT_Construction[Budget tracking])<1,"Yellow",VALUE(FACT_Construction[Budget tracking])=1,"Black",VALUE(FACT_Construction[Budget tracking])>1,"Red",Blank())
+		lineageTag: 12204505-19f6-4fb4-8b04-4c30d10373d0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column BudgetTracking = IF(FACT_Construction[Budget tracking] <> "NA", FORMAT([Budget tracking]*1, "Percent"), "NA")
+		lineageTag: a96b31f3-9ef4-4ee2-9aa1-caa104aaba89
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column BudgetTrackingColor = IF(FACT_Construction[Budget tracking] <> "NA", VALUE([Budget tracking]),BLANK())
+		lineageTag: a0890e24-778b-4b17-8bcc-c08abb4ba9b4
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FACT_Construction = m
+		mode: import
+		queryGroup: Academics
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://hcahealthcare.sharepoint.com/sites/HTPS-GalenCollaboration/Shared%20Documents/Project%20Folder/Executive%20Dashboards/Construction%20Reporting/ConstructionReporting.xlsx"), null, true),
+				    Table1_Table = Source{[Item="Table1",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Table1_Table,{{"Campus", type text}, {"Construction type", type text}, {"Start date", type any}, {"Schedule status", type text}, {"Budget tracking", type any}, {"Courses offered", type text}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each ([Campus] <> null))
+				in
+				    #"Filtered Rows"
+

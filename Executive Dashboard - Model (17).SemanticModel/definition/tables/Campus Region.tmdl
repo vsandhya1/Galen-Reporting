@@ -1,0 +1,65 @@
+table 'Campus Region'
+	lineageTag: 5e7de442-64fe-4896-9cd8-cd2bed9ea6fe
+
+	column LOC_REGION
+		dataType: string
+		lineageTag: f226f7f0-2461-404f-a5bc-a22247d747af
+		summarizeBy: none
+		sourceColumn: LOC_REGION
+
+		annotation SummarizationSetBy = Automatic
+
+	column LOCATIONS_ID
+		dataType: string
+		lineageTag: 352a7c7f-c5d5-4a18-9c4f-817e311b150d
+		summarizeBy: none
+		sourceColumn: LOCATIONS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LOC_DESC
+		dataType: string
+		lineageTag: 298e72de-7842-47b3-a0d1-925c2a6c97ca
+		summarizeBy: none
+		sourceColumn: LOC_DESC
+
+		annotation SummarizationSetBy = Automatic
+
+	column LOCR_DESC
+		dataType: string
+		lineageTag: 026eab23-4977-44c5-9222-bae23b0ced77
+		summarizeBy: none
+		sourceColumn: LOCR_DESC
+
+		annotation SummarizationSetBy = Automatic
+
+	column LOC_STATE
+		dataType: string
+		lineageTag: 0d8c4b09-49f5-48c9-adc5-8ec50ce94806
+		summarizeBy: none
+		sourceColumn: LOC_STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column Custom
+		dataType: string
+		lineageTag: 2a65dde4-f124-4a18-8cbc-6eb62d9f231f
+		summarizeBy: none
+		sourceColumn: Custom
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Campus Region' = m
+		mode: import
+		queryGroup: Dimensions
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="SELECT LOC_REGION, LOCATIONS_ID, LOC_STATE, LOCR_DESC, LOC_DESC #(lf)FROM LOCATIONS L#(lf)LEFT JOIN LOCATION_REGIONS LR ON L.LOC_REGION = LR.LOCATION_REGIONS_ID#(lf)UNION ALL#(lf)SELECT 'OTHER','OTHER','Other','Other Regions','Other Campuses'"]),
+				    #"Added Custom" = Table.AddColumn(Source, "Custom", each "")
+				in
+				    #"Added Custom"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

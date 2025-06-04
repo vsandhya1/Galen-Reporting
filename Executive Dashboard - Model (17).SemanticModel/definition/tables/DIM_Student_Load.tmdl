@@ -1,0 +1,38 @@
+table DIM_Student_Load
+	lineageTag: 8cd0aa63-ef46-42f5-b2d2-dc462f92d750
+
+	column STTR_STUDENT_LOAD
+		dataType: string
+		lineageTag: 4b8809f6-d32b-4723-94ab-1c7997e26e8a
+		summarizeBy: none
+		sourceColumn: STTR_STUDENT_LOAD
+
+		annotation SummarizationSetBy = Automatic
+
+	column VAL_EXTERNAL_REPRESENTATION
+		dataType: string
+		lineageTag: 6ef9f818-a1f2-4098-a01f-1dea3cb95bc8
+		summarizeBy: none
+		sourceColumn: VAL_EXTERNAL_REPRESENTATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Student Load' = SWITCH(DIM_Student_Load[VAL_EXTERNAL_REPRESENTATION],"Full Time","FT","Overload", "FT","PT")
+		lineageTag: f82ce559-4074-4c18-bfb7-b674ba6c84d0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_Student_Load = m
+		mode: import
+		queryGroup: 'Student Load'
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="SELECT #(tab)DISTINCT STTR_STUDENT_LOAD#(lf)#(tab)#(tab)    , VAL_EXTERNAL_REPRESENTATION#(lf)#(tab)#(tab)   #(tab)FROM STUDENT_TERMS ST#(lf)#(tab)INNER JOIN VALS V ON ST.STTR_STUDENT_LOAD = V.VAL_INTERNAL_CODE #(lf)#(tab)                 AND V.VALCODE_ID = 'STUDENT.LOADS'#(lf)UNION#(lf)SELECT 'I', 'Independent Study'"])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

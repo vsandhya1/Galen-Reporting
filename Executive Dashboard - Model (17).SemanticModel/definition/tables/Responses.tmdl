@@ -1,0 +1,34 @@
+table Responses
+	lineageTag: 8e796a5c-9e0b-48e4-a5e6-32415e068686
+
+	column Response_ID
+		dataType: string
+		lineageTag: 8c088043-d499-4279-8341-c6a2a3330159
+		summarizeBy: none
+		sourceColumn: Response_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Response_DESC
+		dataType: string
+		lineageTag: 127cfeee-03a7-48ea-a5a5-0a0d01d985df
+		summarizeBy: none
+		sourceColumn: Response_DESC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Responses = m
+		mode: import
+		queryGroup: Surveys
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WilTSUYpMLVaK1YlW8gOy/fLBzNC87Lz88jygAIwFEg1KLS7Iz0tJTQGKI9ggmeDSorLUSrAEnBkbCwA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t, Column2 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}, {"Column2", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Column1", "Response_ID"}, {"Column2", "Response_DESC"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

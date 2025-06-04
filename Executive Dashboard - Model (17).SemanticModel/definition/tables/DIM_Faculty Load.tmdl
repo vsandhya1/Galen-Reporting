@@ -1,0 +1,25 @@
+table 'DIM_Faculty Load'
+	lineageTag: ee8ba65f-5d24-4e7c-bb81-2b7954789900
+
+	column 'Faculty Load'
+		dataType: string
+		lineageTag: 3823c53d-d9d1-4f35-b9a6-a91320f92951
+		summarizeBy: none
+		sourceColumn: Faculty Load
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'DIM_Faculty Load' = m
+		mode: import
+		queryGroup: Faculty
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WUlbIT1NwS0wuzSmpVPBNTS3JzEtX8MlPTFGK1UGT9S9LLcrBKhOal0JQSiGm1MDAONVIIbCkqFgpNhYA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Faculty Load" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Faculty Load", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

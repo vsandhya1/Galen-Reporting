@@ -1,0 +1,207 @@
+table 'New Starts Future Terms LY'
+	lineageTag: 0a8aedfe-59b5-458c-b5a5-d7d5026cb95a
+
+	measure New_Starts_Future_Terms_LY = ```
+			
+			 VAR FINAL = CALCULATE(DISTINCTCOUNT('New Starts Future Terms LY'[StudentProgramID]))
+			RETURN
+			IF(FINAL=BLANK(),0,FINAL)
+			```
+		formatString: #,0
+		lineageTag: d835db82-5938-4264-b9ec-e74abe367bcb
+
+	measure New_STarts_LYFlag = IF('Cohorts Future Terms'[Future Terms​]>[New_Starts_Future_Terms_LY], UNICHAR(9650), UNICHAR(9660))
+		lineageTag: c1162a5f-53ff-42a8-9106-e988d241013f
+
+	measure New_Starts_LY% = ```
+			
+			Var DIff = 'Cohorts Future Terms'[Future Terms​]-[New_Starts_Future_Terms_LY]
+			return
+			DIVIDE(DIff,'New Starts Future Terms LY'[New_Starts_Future_Terms_LY],0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 5c6aefb2-7665-4196-94b7-fa17e64ff1d1
+
+	measure Measure
+		lineageTag: 3d9ddffe-93ce-4147-b0cf-cf4360f2dcf2
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure New_Starts_ColorCode = IF('Cohorts Future Terms'[Future Terms​] > 'New Starts Future Terms LY'[New_Starts_Future_Terms_LY] , "#00B050",  "#C81515")
+		lineageTag: af69117d-d0c8-461e-8504-6903f581fe2a
+
+	measure FutureTermsColorCode = IF('New Starts Future Terms LY'[New_Starts_Future_Terms_LY] < 'Cohorts Future Terms'[Future Terms​], "#00B050",  "#C81515")
+		lineageTag: 3d332331-8388-4f93-b3a0-cba6ec2f8c1f
+
+	column StudentProgramKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d8a9487-a47d-4834-8612-eaad478263c5
+		summarizeBy: count
+		sourceColumn: StudentProgramKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StudentProgramID
+		dataType: string
+		lineageTag: 645cc137-6112-4002-8f1c-cd102a558e73
+		summarizeBy: none
+		sourceColumn: StudentProgramID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StudentProgramWHKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 248ff6aa-ad13-456d-96c1-49cc2336bd0f
+		summarizeBy: count
+		sourceColumn: StudentProgramWHKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StudentWHKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b73d1f1a-089e-4fe8-b3fa-0004aafbe8e2
+		summarizeBy: count
+		sourceColumn: StudentWHKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramWHKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e0ba97e6-1c80-486e-b6d9-4b9154e2e32a
+		summarizeBy: count
+		sourceColumn: ProgramWHKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnticipatedCompletionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1c6c45fc-e390-497b-acf8-cf4233683957
+		summarizeBy: none
+		sourceColumn: AnticipatedCompletionDate
+
+		variation Variation
+			isDefault
+			relationship: 00e23262-9ea5-4db9-8241-415772839ca6
+			defaultHierarchy: LocalDateTable_f1890f61-7da3-48da-a355-c7a58a22aee3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramStartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b41c7788-ba0f-441b-9779-7c06c1066633
+		summarizeBy: none
+		sourceColumn: ProgramStartDate
+
+		variation Variation
+			isDefault
+			relationship: 7c235324-58c9-4d15-881b-cedb9bc1e749
+			defaultHierarchy: LocalDateTable_14eeebd1-fa51-4bd7-9e41-72a4da48534f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramEndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9f86a28b-0824-4ac6-abc2-c68edd535566
+		summarizeBy: none
+		sourceColumn: ProgramEndDate
+
+		variation Variation
+			isDefault
+			relationship: 1a1b586a-d693-4500-9b83-c2f1a10f9fbd
+			defaultHierarchy: LocalDateTable_9ce75767-ce17-4492-b73a-d0efb213b3ca.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramStatus
+		dataType: string
+		lineageTag: 391fd0ba-b143-45fa-82db-0647c5eaaf24
+		summarizeBy: none
+		sourceColumn: ProgramStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramStatusDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4111c54b-8f97-435c-9a05-01b63e244004
+		summarizeBy: none
+		sourceColumn: ProgramStatusDate
+
+		variation Variation
+			isDefault
+			relationship: 46fd8800-0312-45f9-ab98-bd90b3073e77
+			defaultHierarchy: LocalDateTable_16ec8695-71fd-4bad-876d-c1fa5d36da65.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramStatusDesc
+		dataType: string
+		lineageTag: 010ece3d-b404-430f-bb1c-3787c90041a5
+		summarizeBy: none
+		sourceColumn: ProgramStatusDesc
+
+		annotation SummarizationSetBy = Automatic
+
+	column DropReason
+		dataType: string
+		lineageTag: 72bd3bbf-6e39-40a8-a20e-3b1d96023d8b
+		summarizeBy: none
+		sourceColumn: DropReason
+
+		annotation SummarizationSetBy = Automatic
+
+	column DropCode
+		dataType: string
+		lineageTag: 535bea06-817b-430c-9f69-ff160c95b052
+		summarizeBy: none
+		sourceColumn: DropCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrentInd
+		dataType: int64
+		formatString: 0
+		lineageTag: a18d232a-58f4-4cf5-8965-717e12434f69
+		summarizeBy: sum
+		sourceColumn: CurrentInd
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramID
+		dataType: string
+		lineageTag: a1ba256c-2377-4f74-a2ad-26c27b5f501d
+		summarizeBy: none
+		sourceColumn: ProgramID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CampusID
+		dataType: string
+		lineageTag: 44258d2d-c657-4374-b617-ae572f6a5d05
+		summarizeBy: none
+		sourceColumn: CampusID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'New Starts Future Terms LY' = m
+		mode: import
+		queryGroup: 'New Starts'
+		source =
+				let
+				    Source = Sql.Database("gln-galendatawarehouse-db1-prod.database.windows.net", "gln-datawarehouse", [Query="DECLARE @LASTYEAR DATE = DATEADD(YEAR, -1, GETDATE());#(lf)#(lf)SELECT stp.* ,p.ProgramID, C.CampusID#(lf)#(tab)FROM StudentProgramDim stp#(lf)#(tab)INNER JOIN TermDim TD ON stp.ProgramStartDate BETWEEN TD.TermStartDate and TD.TermEndDate#(lf)#(tab)#(tab)#(tab)#(tab)#(tab)#(tab) AND @LASTYEAR BETWEEN TD.RecordStartDate AND TD.RecordEndDate#(lf)#(tab)LEFT JOIN ProgramDim P ON stp.ProgramWHKey = P.ProgramWHKey#(lf)#(tab)LEFT JOIN CampusDim C ON C.CampusWHKey = stp.CampusWHKey#(lf)#(tab)WHERE @LASTYEAR BETWEEN stp.RecordStartDate AND stp.RecordEndDate#(lf)#(tab)  AND ProgramStatus = 'A'#(lf)#(tab)  AND TD.TermStartDate > @LASTYEAR"]),
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"CampusWHKey", "ProgramCatalog", "StsType", "ModifiedBy", "ModifiedDate", "RecordStartDate", "RecordEndDate", "ETLBatchID", "HashValue"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

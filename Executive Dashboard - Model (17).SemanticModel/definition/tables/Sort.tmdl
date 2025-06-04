@@ -1,0 +1,30 @@
+table Sort
+	lineageTag: 80f9b7f7-c060-43c9-8d47-4263bdcb967f
+
+	column Sec_Term
+		lineageTag: 6b0f457f-e7f7-46df-ac1a-0a09cf3b251f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Sec_Term]
+		sortByColumn: 'Summarize_Term Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Summarize_Term Sort'
+		formatString: 0
+		lineageTag: 45a9766f-1979-4cd8-b192-dd41e7c14c81
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Summarize[Term Sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sort = calculated
+		mode: import
+		source = ```
+				
+				DISTINCT(SELECTCOLUMNS('Summarize',"Sec_Term", 'Summarize'[SEC_TERM], 'Summarize'[Term Sort])) 
+				```
+
+	annotation PBI_Id = 1fe1b0df3b764f79bfbc863df7302995
+

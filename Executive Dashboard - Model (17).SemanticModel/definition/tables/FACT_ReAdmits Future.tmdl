@@ -1,0 +1,100 @@
+table 'FACT_ReAdmits Future'
+	lineageTag: 7638167f-76eb-45d9-b05b-169d5d01e81c
+
+	measure FutureReadmissions = CALCULATE(COUNT('FACT_ReAdmits Future'[STUDENT_PROGRAMS_ID]), DIM_Terms[IsNextTerm] = TRUE(), 'FACT_ReAdmits Future'[STPR_ADMIT_STATUS] = "RE")+0
+		formatString: 0
+		lineageTag: 80347fa8-55de-4541-b704-be6c76ea7218
+
+	measure Future_Readmission_Flag =
+			IF('FACT_ReAdmits Future'[FutureReadmissions]>'FACT_ReAdmits Budget'[ReAdmits_Next_Terms], UNICHAR(9650), UNICHAR(9660))
+			
+			// "🔺","🔻")
+		lineageTag: c376ce70-c214-4187-8af7-597a80907938
+
+	measure Future_Readmission_Code = IF('FACT_ReAdmits Future'[FutureReadmissions]>'FACT_ReAdmits Budget'[ReAdmits_Next_Terms], "#00B050","#C81515")
+		lineageTag: d055a87a-4733-46b6-857a-761dbcc5e48f
+
+	column STUDENT_PROGRAMS_ID
+		dataType: string
+		lineageTag: 7821fb63-dd50-4d70-bce9-6ce480a4e83a
+		summarizeBy: none
+		sourceColumn: STUDENT_PROGRAMS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_LOCATION
+		dataType: string
+		lineageTag: c84a29e6-bf60-4ade-9ac7-22e69156276e
+		summarizeBy: none
+		sourceColumn: STPR_LOCATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_START_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 16d53db9-5b9e-49e5-b3cb-fef0bfc905ae
+		summarizeBy: none
+		sourceColumn: STPR_START_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_END_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8d6fd01b-3e54-4bd9-90bf-97f8dbcc2c19
+		summarizeBy: none
+		sourceColumn: STPR_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 6663005e-e660-4b34-a9d1-a53166771a13
+			defaultHierarchy: LocalDateTable_7963d085-4504-4bc3-9ea4-0c6ff10a4723.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_STATUS
+		dataType: string
+		lineageTag: 96a20d08-9c7c-497a-9ea3-3c9c52aa3031
+		summarizeBy: none
+		sourceColumn: STPR_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_ADMIT_STATUS
+		dataType: string
+		lineageTag: b51bbb15-ee0c-4fec-b357-705243c218da
+		summarizeBy: none
+		sourceColumn: STPR_ADMIT_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column PROGRAM_ID
+		dataType: string
+		lineageTag: 12089cce-0fd5-4d13-b21b-da584767f28c
+		summarizeBy: none
+		sourceColumn: PROGRAM_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENT_ID
+		dataType: string
+		lineageTag: 33f455d2-af70-456b-8e72-f3dbf7f3859e
+		summarizeBy: none
+		sourceColumn: STUDENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FACT_ReAdmits Future' = m
+		mode: import
+		queryGroup: Students
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="---Here's the query for future term readmits: #(lf)#(lf)#(lf)#(lf)--DECLARE @CURRENTDATE DATE = '12-21-2024';#(lf)DECLARE @CURRENTDATE DATE = GETDATE();#(lf)DROP TABLE IF EXISTS #FUTURE_TERM_READMITS, #TERMS_GROUND, #TERMS_ONLINE#(lf)#(lf)#(lf)SELECT TOP 1 TERMS_ID, TERM_START_DATE, TERM_END_DATE#(lf)INTO #TERMS_GROUND#(lf)        FROM TERMS T#(lf)        WHERE RIGHT(T.TERMS_ID, 1) = 'Q'#(lf)        AND @CURRENTDATE < TERM_START_DATE#(lf)ORDER BY TERM_START_DATE ASC#(lf)#(lf)#(lf)        SELECT TOP 1 TERMS_ID, TERM_START_DATE, TERM_END_DATE#(lf)INTO #TERMS_ONLINE#(lf)        FROM TERMS T#(lf)        WHERE RIGHT(T.TERMS_ID, 1) <> 'Q'#(lf)        AND @CURRENTDATE < TERM_START_DATE#(lf)ORDER BY TERM_START_DATE ASC#(lf)#(lf)#(lf)--SELECT DISTINCT STUDENT_PROGRAMS_ID,STPR_LOCATION,#(lf)--STPR_START_DATE, STPR_END_DATE#(lf)--,STPR_STATUS#(lf)--,STPR_ADMIT_STATUS#(lf)--,PROGRAM_ID#(lf)--INTO #OG#(lf)--FROM (#(lf)--SELECT SP.STUDENT_PROGRAMS_ID,SP.STPR_LOCATION,#(lf)--SPD.STPR_START_DATE, SPD.STPR_END_DATE#(lf)--,SPS.STPR_STATUS#(lf)--,SP.STPR_ADMIT_STATUS#(lf)--,T.TERM_TO_BE_USED TERMS_ID#(lf)--,RIGHT(SP.STUDENT_PROGRAMS_ID, LEN(SP.STUDENT_PROGRAMS_ID) - 8) PROGRAM_ID#(lf)--FROM STUDENT_PROGRAMS SP#(lf)--INNER JOIN STPR_DATES SPD ON SP.STUDENT_PROGRAMS_ID = SPD.STUDENT_PROGRAMS_ID AND SPD.POS = 1#(lf)--INNER JOIN STPR_STATUSES SPS ON SP.STUDENT_PROGRAMS_ID = SPS.STUDENT_PROGRAMS_ID AND SPS.POS = 1#(lf)--INNER JOIN #TERMS_GROUND  T ON SPD.STPR_START_DATE BETWEEN T.TERM_START_DATE_TO_BE_USED AND T.TERM_END_DATE_TO_BE_USED#(lf)--WHERE SPS.STPR_STATUS IN ('A')#(lf)--AND STPR_ADMIT_STATUS = 'RE'#(lf)--AND STPR_LOCATION <> 'ONL'#(lf)--UNION#(lf)--SELECT SP.STUDENT_PROGRAMS_ID,SP.STPR_LOCATION,#(lf)--SPD.STPR_START_DATE, SPD.STPR_END_DATE#(lf)--,SPS.STPR_STATUS#(lf)--,SP.STPR_ADMIT_STATUS#(lf)--,T.TERM_TO_BE_USED TERMS_ID#(lf)--,RIGHT(SP.STUDENT_PROGRAMS_ID, LEN(SP.STUDENT_PROGRAMS_ID) - 8) PROGRAM_ID#(lf)--FROM STUDENT_PROGRAMS SP#(lf)--INNER JOIN STPR_DATES SPD ON SP.STUDENT_PROGRAMS_ID = SPD.STUDENT_PROGRAMS_ID AND SPD.POS = 1#(lf)--INNER JOIN STPR_STATUSES SPS ON SP.STUDENT_PROGRAMS_ID = SPS.STUDENT_PROGRAMS_ID AND SPS.POS = 1#(lf)--INNER JOIN #TERMS_ONLINE T ON SPD.STPR_START_DATE BETWEEN T.TERM_START_DATE_TO_BE_USED AND T.TERM_END_DATE_TO_BE_USED#(lf)--WHERE SPS.STPR_STATUS IN ('A')#(lf)--AND STPR_ADMIT_STATUS = 'RE'#(lf)--AND STPR_LOCATION = 'ONL') A#(lf)#(lf)#(lf)#(lf)#(lf)SELECT SP.STUDENT_PROGRAMS_ID#(lf),LEFT(SP.STUDENT_PROGRAMS_ID, 7) STUDENT_ID#(lf),SP.STPR_LOCATION#(lf),SPD.STPR_START_DATE#(lf),SPD.STPR_END_DATE#(lf),SPS.STPR_STATUS#(lf),SP.STPR_ADMIT_STATUS#(lf),RIGHT(SP.STUDENT_PROGRAMS_ID, LEN(SP.STUDENT_PROGRAMS_ID) - 8) PROGRAM_ID#(lf)INTO #FUTURE_TERM_READMITS#(lf)FROM STUDENT_PROGRAMS SP#(lf)INNER JOIN STPR_DATES SPD ON SP.STUDENT_PROGRAMS_ID = SPD.STUDENT_PROGRAMS_ID AND SPD.POS = 1#(lf)INNER JOIN STPR_STATUSES SPS ON SP.STUDENT_PROGRAMS_ID = SPS.STUDENT_PROGRAMS_ID AND SPS.POS = 1#(lf)WHERE SPS.STPR_STATUS IN ('A')#(lf)AND STPR_ADMIT_STATUS = 'RE'#(lf)AND STPR_START_DATE IN (#(lf)SELECT TERM_START_DATE#(lf)FROM #TERMS_GROUND#(lf)UNION#(lf)SELECT TERM_START_DATE#(lf)FROM #TERMS_ONLINE#(lf))#(lf)#(lf)SELECT * FROM #FUTURE_TERM_READMITS#(lf)#(lf)"])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
