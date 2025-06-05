@@ -1,0 +1,377 @@
+table 'FACT_Satisfaction <2024'
+	lineageTag: e08a380d-f318-4db1-ab1e-483d67ffaf95
+
+	measure NbrOfInvites_LYQTR =
+			
+			CALCULATE(SUMX(
+			    VALUES('FACT_Satisfaction <2024'[COURSE_SECTIONS_ID]),
+			    [MinReponsePerCourse]
+			),DIM_Terms[DatesInCompletedQuarterPreviousYear]=1)+0
+		formatString: 0
+		lineageTag: ddc97a7c-4980-4822-b7be-d497c9624eff
+
+	measure MinReponsePerCourse =
+			
+			CALCULATE(
+			    MIN('FACT_Satisfaction <2024'[Participants]),
+			    ALLEXCEPT('FACT_Satisfaction <2024', 'FACT_Satisfaction <2024'[COURSE_SECTIONS_ID], 'FACT_Satisfaction <2024'[Program], 'FACT_Satisfaction <2024'[SEC_TERM], 'FACT_Satisfaction <2024'[SEC_LOCATION])
+			,DIM_Terms[Is_Last_Year_Today_Between]="TRUE")
+		formatString: 0
+		lineageTag: 588d2cff-2729-4334-a142-2f6463597d96
+
+	measure Response_Rate_QTR = ```
+			
+			CALCULATE(
+			    COALESCE(
+			        DIVIDE(
+			            COUNT('FACT_Satisfaction <2024'[Response]),
+			            [NbrOfInvites_LYQTR],
+			            0
+			        ),
+			        0
+			    ),
+			    DIM_Terms[Is_Last_Year_Today_Between] = "TRUE"
+			)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 2664c4ca-20d0-4e30-aa76-901c3d87a421
+
+	measure Response_Count_LYQTR = CALCULATE(COUNT('FACT_Satisfaction <2024'[Response]),DIM_Terms[PreviousYearCompletedQuarter]=1)+0
+		formatString: 0
+		lineageTag: f8a23d6c-bf30-45fa-aa70-9f09d2ae61a9
+
+	measure NbrOfInvites_LYTD =
+			
+			CALCULATE(SUMX(
+			    VALUES('FACT_Satisfaction <2024'[COURSE_SECTIONS_ID]),
+			    [MinReponsePerCourse]
+			),DIM_Terms[LastYearYTDFlag]=1)+0
+		formatString: 0
+		lineageTag: 9064e3b2-f9d4-4641-ac90-c31026108dd9
+
+	measure Response_Count_LYTD = CALCULATE(COUNT('FACT_Satisfaction <2024'[Response]),DIM_Terms[LastYearYTDFlag_Satisfaction]=1)+0
+		formatString: 0
+		lineageTag: 28082e60-3eae-4a01-9474-b664ebcade0e
+
+	measure Response_Rate_LYTD = DIVIDE([Response_Count_LYTD],[NbrOfInvitesQualtrics_YTD],0)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 683da528-9dca-4deb-9b2f-53ee5388b91f
+
+	measure Response_QTR_Flag = IF([ResponseRateQualtrics]>[Response_Rate_QTR], UNICHAR(9650), UNICHAR(9660))
+		lineageTag: 71f3092f-cad4-4e6a-a2c4-6717ad8487ea
+
+	measure Response_YTD_Flag = IF([ResponseYTDVariance]>[Response_Rate_LYTD], UNICHAR(9650), UNICHAR(9660))
+		lineageTag: 2848545d-57a2-4d0c-a889-51449141eb5d
+
+	measure LYTD_Label = "YTD " & (YEAR(TODAY())-1)
+		lineageTag: 03d1de7d-8f5c-4b35-b6be-557ff9a37244
+
+	measure Recommand_LYQTR% =
+			
+			var Num = CALCULATE([Response_Count_LYQTR],ALLSELECTED('Dim Recommend Galen'))
+			RETURN
+			 "(" & FORMAT([Response_Count_LYQTR]/Num, "0%") & ")"
+		lineageTag: eaef2587-b1e7-416d-8b19-faad1d9a57d3
+
+	measure Recommand_LYTD% = ```
+			
+			var Num = CALCULATE([Response_Count_LYTD],ALLSELECTED('Dim Recommend Galen'))
+			RETURN
+			 "(" & FORMAT([Response_Count_LYTD]/Num, "0%") & ")"
+			
+			```
+		lineageTag: e5d960f1-0675-4619-ae31-59bd67277fa7
+
+	measure 'YTD to YTD' =
+			
+			
+			var CYNum = CALCULATE([ResponseID_count_YTD],ALLSELECTED('Dim Recommend Galen'))
+			Var CYTD = [ResponseID_count_YTD]/CYNum
+			var LYNum = CALCULATE([Response_Count_LYTD_2024_ON],ALLSELECTED('Dim Recommend Galen'))
+			Var LYTD = [Response_Count_LYTD_2024_ON]/LYNum
+			 RETURN
+			CYTD- LYTD
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a68fca83-3ae1-4406-8c1d-0c29992f7c56
+
+	measure Enrolled_LYQTR = CALCULATE(MAX('FACT_Satisfaction <2024'[Participants]),DIM_Terms[PreviousYearCompletedQuarter]=1)
+		formatString: 0
+		lineageTag: b73f7356-07f3-4352-b8cc-0d75b671420a
+
+	measure Surveyed_LYQTR_FInal = SUMX(VALUES('FACT_Satisfaction <2024'[Course_Section_Id]),[Enrolled_LYQTR])
+		formatString: 0
+		lineageTag: cdeb55bd-4a98-4c6e-97eb-93f0e879e024
+
+	measure Enrolled_LYTD = CALCULATE(MAX('FACT_Satisfaction <2024'[Participants]),DIM_Terms[LastYearYTDFlag_Satisfaction]=1)
+		formatString: 0
+		lineageTag: d72dfd1d-5864-441e-8f49-5342d6bd651e
+
+	measure Surveyed_LYTD_Final = ```
+			
+			COALESCE(
+			    SUMX(
+			        VALUES('FACT_Satisfaction <2024'[Course_Section_Id]),
+			        [Enrolled_LYTD]
+			    ),
+			    0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 51d0d249-b63b-4a43-86cd-598ed6888ad1
+
+	measure Survey = SWITCH(TRUE(),("2nd_QTR_2024"),"")
+		formatString: 0
+		lineageTag: 8268b337-1c30-439e-a523-967da85868f9
+
+	measure CYQTR-LYQTR_variance = [Response_CYQTR%]-[Response_LYQTR%]
+		lineageTag: e6cf493d-6f10-4e06-bf15-a1cab2082f1d
+
+	measure CYTD-LYTD_variance = [Response_CYTD%]-[Response_LYTD%]
+		lineageTag: 5f65e588-8bb1-4e3f-91ef-5843e36a60de
+
+	measure Response_LYQTR% = CALCULATE([Response_Count_LYQTR] / [Surveyed_LYQTR_FInal])
+		lineageTag: d446ed10-dd30-40ea-9837-01d39e4e1c87
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Response_LYTD% = CALCULATE([Response_Count_LYTD_2024_ON] / [surveyed_LYTD_Final_2024_on])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f9e47c44-5c37-4eaf-9e78-32665abc760d
+
+	measure Responseratecolor = IF([ResponseRateQualtrics]>[Response_Rate_QTR], "#00B050", "#C81515")
+		lineageTag: ff99c078-a8a1-41d8-9811-10c46c5ab08d
+
+	measure Response_YTD_color = IF([ResponseYTDVariance]>[Response_Rate_LYTD], "#00B050", "#C81515")
+		lineageTag: a12dec39-e47a-4c54-9488-eba5559d314f
+
+	measure C_Recommand_LYTD% = ```
+			
+			var Response_Count_LYTD = CALCULATE(COUNT('FACT_Satisfaction <2024'[Response]),DIM_Terms[LastYearYTDFlag]=1)+0
+			var Num = CALCULATE(Response_Count_LYTD,ALLSELECTED('Dim Recommend Galen'))
+			RETURN
+			 "(" & FORMAT([Response_Count_LYTD]/Num, "0%") & ")"
+			
+			```
+		lineageTag: 548e5a61-9797-4c90-84fd-bd36224a9390
+
+	column Program
+		dataType: string
+		lineageTag: 5a1e70f2-2ad8-4554-9ba2-a15661e34bf9
+		summarizeBy: none
+		sourceColumn: Program
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campus
+		dataType: string
+		lineageTag: fd28c69a-2d56-4faf-a54e-c1053e23b928
+		summarizeBy: none
+		sourceColumn: Campus
+
+		annotation SummarizationSetBy = Automatic
+
+	column Course_Section_Id
+		dataType: string
+		lineageTag: e04b6222-37e1-4767-9180-574235dbc8db
+		summarizeBy: none
+		sourceColumn: Course_Section_Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column FileName
+		dataType: string
+		lineageTag: 80f7cc14-6843-4035-8cf0-78c82d85d558
+		summarizeBy: none
+		sourceColumn: FileName
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Teacher First Name'
+		dataType: string
+		lineageTag: 5919c2d5-c3f8-4bd4-a841-ff33fb7e7419
+		summarizeBy: none
+		sourceColumn: Teacher First Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Teacher Last name'
+		dataType: string
+		lineageTag: c43a8293-810c-4576-9b89-eb35fdc13b48
+		summarizeBy: none
+		sourceColumn: Teacher Last name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Course
+		dataType: string
+		lineageTag: 04a4c4bc-2e8e-4947-b4f7-0013a93f385d
+		summarizeBy: none
+		sourceColumn: Course
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID
+		dataType: string
+		lineageTag: 731d4a58-e107-414f-8b6b-32bec84b970d
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Program of Study'
+		dataType: string
+		lineageTag: 44820a37-cf67-41e1-9e11-8258d118962e
+		summarizeBy: none
+		sourceColumn: Program of Study
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		dataType: string
+		lineageTag: 9b0ce30b-7c4c-43a3-93e7-2dfd551889f7
+		summarizeBy: none
+		sourceColumn: Location
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Course Type'
+		dataType: string
+		lineageTag: 2e6ae0d0-e1b9-4982-a88e-d9293a1f7278
+		summarizeBy: none
+		sourceColumn: Course Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Participants
+		dataType: int64
+		formatString: 0
+		lineageTag: 09b47ab7-f506-48d0-bb0e-9d1b2dc5caaa
+		summarizeBy: sum
+		sourceColumn: Participants
+
+		annotation SummarizationSetBy = Automatic
+
+	column Period
+		dataType: string
+		lineageTag: 2122b50d-c251-472a-ba5a-5b474426ec17
+		summarizeBy: none
+		sourceColumn: Period
+
+		annotation SummarizationSetBy = Automatic
+
+	column Response
+		dataType: int64
+		formatString: 0
+		lineageTag: ee0d7b26-19db-4a96-9807-38d16e01e229
+		summarizeBy: sum
+		sourceColumn: Response
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Would you recommend Galen to someone interested in attending a nursing program?'
+		dataType: string
+		lineageTag: 6db51df1-1a1c-4078-9d0f-d276c748037e
+		summarizeBy: none
+		sourceColumn: Would you recommend Galen to someone interested in attending a nursing program?
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column COURSE_SECTIONS_ID
+		dataType: string
+		lineageTag: 50e884ca-c027-4fa7-ab34-d7045dff158c
+		summarizeBy: none
+		sourceColumn: COURSE_SECTIONS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEC_SHORT_TITLE
+		dataType: string
+		lineageTag: 74dd5109-59bd-48e4-8d0a-3e2eb98669c0
+		summarizeBy: none
+		sourceColumn: SEC_SHORT_TITLE
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEC_LOCATION
+		dataType: string
+		lineageTag: 19aacba2-76a5-4abe-9bc0-291bc73d3d4f
+		summarizeBy: none
+		sourceColumn: SEC_LOCATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEC_TERM
+		dataType: string
+		lineageTag: 0c29a763-0123-4082-a233-4506b6a15ca1
+		summarizeBy: none
+		sourceColumn: SEC_TERM
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEC_FACULTY_INFO
+		dataType: string
+		lineageTag: fddd0125-cf0c-4388-b363-550754f650fb
+		summarizeBy: none
+		sourceColumn: SEC_FACULTY_INFO
+
+		annotation SummarizationSetBy = Automatic
+
+	column TERM_DESC
+		dataType: string
+		lineageTag: e1ac3931-8c62-471c-89f2-139673d6f489
+		summarizeBy: none
+		sourceColumn: TERM_DESC
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Recommend Galen' = SWITCH('FACT_Satisfaction <2024'[Would you recommend Galen to someone interested in attending a nursing program?],"1","YES","2","NO","UNKNOWN")
+		lineageTag: bb587265-ccb8-4975-9c20-b975dab2b7d9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Secondary instructors'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5ef994f8-962b-4307-a819-b700b3117c0a
+		summarizeBy: sum
+		sourceColumn: Secondary instructors
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEC_STATUS
+		dataType: string
+		lineageTag: 9828c7d6-478a-448e-afaf-5b3be509b04a
+		summarizeBy: none
+		sourceColumn: SEC_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FACT_Satisfaction <2024' = m
+		mode: import
+		queryGroup: Surveys
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://hcahealthcare.sharepoint.com/sites/HTPS-GalenCollaboration/Shared%20Documents/Project%20Folder/Executive%20Dashboards%2FStudent%20Satisfaction%20Survey%20Data%202023%20and%20prior/ClassClimateSurveyData.xlsx"), null, true),
+				    Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers1" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Promoted Headers1",{{"Program", type text}, {"Campus", type text}, {"Course_Section_Id", Int64.Type}, {"FileName", type text}, {"First Name", type text}, {"Last name", type text}, {"Course", type text}, {"ID", type text}, {"Program of Study", type any}, {"Location", type text}, {"Course Type", type text}, {"Participants", Int64.Type}, {"Secondary instructors", Int64.Type}, {"Period", type text}, {"Sheet", Int64.Type}, {"Would you recommend Galen to someone interested in attending a nursing program?", Int64.Type}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Changed Type2",{{"Course_Section_Id", type text}}),
+				    #"Remove File Headers" = Table.SelectRows(#"Changed Type", each ([First Name] <> "First Name")),
+				    #"Renamed Columns" = Table.RenameColumns(#"Remove File Headers",{{"Sheet", "Response"}, {"First Name", "Teacher First Name"}, {"Last name", "Teacher Last name"}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each [Participants] > 0),
+				    #"Merged Queries" = Table.NestedJoin(#"Filtered Rows", {"Course_Section_Id"}, #"<2024 Class Sections", {"COURSE_SECTIONS_ID"}, "2023 Class Sections", JoinKind.LeftOuter),
+				    #"Expanded 2023 Class Sections" = Table.ExpandTableColumn(#"Merged Queries", "2023 Class Sections", {"COURSE_SECTIONS_ID", "SEC_SHORT_TITLE", "SEC_LOCATION", "SEC_TERM", "SEC_FACULTY_INFO", "SEC_STATUS", "TERM_DESC"}, {"COURSE_SECTIONS_ID", "SEC_SHORT_TITLE", "SEC_LOCATION", "SEC_TERM", "SEC_FACULTY_INFO", "SEC_STATUS", "TERM_DESC"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Expanded 2023 Class Sections",{{"Participants", Int64.Type}}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Changed Type1", each Text.StartsWith([SEC_TERM], "2023"))
+				in
+				    #"Filtered Rows1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

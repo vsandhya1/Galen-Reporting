@@ -1,0 +1,174 @@
+table Key_Measure
+	lineageTag: dfe9cd3f-b9d0-4543-966c-eab975d0fc46
+
+	measure Dismissals% = DIVIDE([Dismissals_Count],(DISTINCTCOUNT('Active Students DSET'[STUDENT_ID])+[CurrentTermDR]),0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: ef325b06-c22a-41e3-8f3a-82b4d6e8124b
+
+	measure PreviousYearWithdrawal% = [PreviousYearWithdrawal]/DISTINCTCOUNT('Active Students LY'[STUDENT_ID])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 7a80285f-c849-4109-8770-bb43bee761dc
+
+	measure PreviousYearDismissals% = DIVIDE([PreviousYearDismissals],DISTINCTCOUNT('Active Students LY'[STUDENT_ID]),0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a047b5a5-41f8-45f8-9b9c-704e53151afc
+
+	measure WithdrawalDifference =
+			
+			([Withdrawals%]-[PrevYearWithdrawal%])*100
+		lineageTag: 30e659c7-13b8-4708-ba82-84d948ad3798
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DismissalsDifference = ([Dismissals%]- [PrevYearDismissals%])*100
+		lineageTag: ec4aafe1-0d93-4b0b-a06e-ac14e8614a75
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Withdrawals% =
+			
+			DIVIDE([Withdrawals_Count],(DISTINCTCOUNT('Active Students DSET'[STUDENT_ID])+[CurrentTermDR]),0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 66bb4f22-3cb7-4414-9589-55aba9ef72c0
+
+	measure PreviousYearDismissals%1 = ```
+			
+			VAR PreviousYearDismissals = [PreviousYearDismissals]
+			VAR TotalStudents = (DISTINCTCOUNT('Active Students LY'[STUDENT_ID])+[PreviousYearDismissals]+[PreviousYearWithdrawal])
+			VAR Percentage = DIVIDE(PreviousYearDismissals , TotalStudents,0)
+			RETURN
+			    IF(
+			        Percentage > 0,                                      
+			        "("&CONCATENATE("+", FORMAT(Percentage, "0.00%"))&")",     
+			        "("&CONCATENATE("-", FORMAT(ABS(Percentage), "0.00%")) &")" 
+			    )
+			
+			```
+		lineageTag: 7cad38a7-464f-488a-a20a-83ace3104142
+
+	measure PreviousYearWithdrawal%1 = ```
+			
+			VAR PreviousYearWithdrawal = [PreviousYearWithdrawal]
+			VAR TotalStudents = (DISTINCTCOUNT('Active Students LY'[STUDENT_ID])+[PreviousYearWithdrawal]+[PreviousYearDismissals])
+			VAR Percentage = DIVIDE(PreviousYearWithdrawal , TotalStudents,0)
+			RETURN
+			    IF(
+			        Percentage > 0,                                     
+			        "("&CONCATENATE("+", FORMAT(Percentage, "0.00%"))&")",     
+			        "("&CONCATENATE("-", FORMAT(ABS(Percentage), "0.00%")) &")"
+			    )
+			
+			```
+		lineageTag: 9bdb9252-aadd-451b-b458-dcee69eaa8ef
+
+	measure Withdrawals%1 = ```
+			
+			VAR WithdrawalsCount = [Withdrawals_Count]
+			VAR TotalStudents = DISTINCTCOUNT('Active Students DSET'[STUDENT_ID])
+			VAR Percentage = WithdrawalsCount / TotalStudents
+			RETURN
+			    "(" & FORMAT(Percentage, "0.00%") & ")"
+			
+			```
+		lineageTag: 24c531a3-7318-4b23-ac91-7c8904b099d8
+
+	measure CurrentWeekFormatted = ```
+			
+			VAR WeekNumber = WEEKNUM(TODAY(), 2)
+			RETURN
+			    "YTD as of Week " & WeekNumber
+			
+			```
+		lineageTag: 312a6ef0-9c9b-40c9-831c-a4d588180cdc
+
+	measure CurrentDateFormatted = ```
+			FORMAT(TODAY(), "MMMM D, YYYY")
+			
+			```
+		lineageTag: d142faae-76dd-408c-898f-2474789b9bd9
+
+	measure Dismissal%display = ```
+			
+			    "(" & FORMAT([Dismissals%], "0.00%") & ")"
+			```
+		lineageTag: bc1981e3-6e70-4c69-9d46-4059e5f60e15
+
+	measure PrevYearWithdrawal% = ```
+			
+			VAR PreviousYearWithdrawal = [PreviousYearWithdrawal]
+			VAR TotalStudents = (DISTINCTCOUNT('Active Students LY'[STUDENT_ID])+[PreviousYearWithdrawal]+[PreviousYearDismissals])
+			VAR Percentage = DIVIDE(PreviousYearWithdrawal,TotalStudents,0)
+			RETURN
+			    Percentage 
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 0e0f7c88-3c2c-489d-85c4-2b02746ec0f3
+
+	measure PrevYearDismissals% =
+			
+			VAR PreviousYearDismissals = [PreviousYearDismissals]
+			VAR TotalStudents = (DISTINCTCOUNT('Active Students LY'[STUDENT_ID])+[PreviousYearDismissals]+[PreviousYearWithdrawal])
+			VAR Percentage = DIVIDE(PreviousYearDismissals , TotalStudents,0)
+			RETURN
+			   Percentage
+		lineageTag: 4e0d6301-34c0-4d3b-bff8-110fcc14b690
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DisplayText = ```
+			"STAFF"
+			
+			```
+		lineageTag: ab81bba7-5e81-4063-a247-3b5987466906
+
+	measure DisplayText1 = ```
+			"FACULTY"
+			
+			```
+		lineageTag: 5ef0c362-59ed-4e09-8e00-004fe541a733
+
+	measure DisplayTextFT = "F/T"
+		lineageTag: 78b7118c-b0c2-4693-b2af-fd49599a7d5f
+
+	measure DisplayTextPT = "P/T"
+		lineageTag: 1b405f36-5fb8-40d7-b031-8c2dae043808
+
+	measure DisplayTextRT = "Response Rate"
+		lineageTag: 38330eae-78b9-45e5-9929-bf771123f907
+
+	measure DisplayTextSat = "Would you recommend Galen to someone interested in attending a nursing Program?"
+		lineageTag: 312b78dd-584d-49ac-ac8c-21ed326aaa6b
+
+	measure DisplayTextDiversity = "DIVERSITY*"
+		lineageTag: 2ba87b1c-140f-4b8f-ab9a-b30e497a2c7f
+
+	measure DisplayTextSatisfaction = "SATISFACTION"
+		lineageTag: 5816ea1a-eb97-4aca-96ac-9331d0f26ceb
+
+	measure WithdrawalsPercentageDisplay =
+			
+			VAR Final = [Withdrawals%]
+			RETURN
+			    "(" & FORMAT(Final, "0.00%") & ")"
+		lineageTag: 0760c117-06c4-47d4-95f8-9ccd9792e7ad
+
+	column Column1
+		dataType: string
+		lineageTag: 485a62a5-6023-4567-9b29-9af56c0d2c61
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Key_Measure = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

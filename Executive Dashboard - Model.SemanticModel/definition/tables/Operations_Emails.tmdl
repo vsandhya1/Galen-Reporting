@@ -1,0 +1,57 @@
+table Operations_Emails
+	lineageTag: e0b87246-9f47-486d-b7aa-56773e620b86
+
+	column ID
+		dataType: string
+		lineageTag: 0f873077-173a-4440-9ebe-5c83c69db101
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column POS
+		dataType: double
+		lineageTag: fb4b501f-5fc9-4c4f-a8fd-df17c39e6322
+		summarizeBy: none
+		sourceColumn: POS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PERSON_EMAIL_TYPES
+		dataType: string
+		lineageTag: f0562d67-f4d9-4344-81f4-6323cfe493c2
+		summarizeBy: none
+		sourceColumn: PERSON_EMAIL_TYPES
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERSON_EMAIL_ADDRESSES
+		dataType: string
+		lineageTag: 43dcfbf3-458a-454a-849b-aa875fefe41f
+		summarizeBy: none
+		sourceColumn: PERSON_EMAIL_ADDRESSES
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERSON_PREFERRED_EMAIL
+		dataType: string
+		lineageTag: ab02f327-e2ed-4762-97d3-7a20095190ed
+		summarizeBy: none
+		sourceColumn: PERSON_PREFERRED_EMAIL
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Operations_Emails = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="SELECT * FROM PEOPLE_EMAIL#(lf)WHERE PERSON_PREFERRED_EMAIL = 'Y'"])
+				in
+				    Source
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

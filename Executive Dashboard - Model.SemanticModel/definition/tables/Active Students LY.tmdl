@@ -1,0 +1,235 @@
+table 'Active Students LY'
+	lineageTag: c9642cd4-f649-4ee5-8db6-acbb4d986534
+
+	measure FirstGenLY =
+			
+			VAR TotalStudents = CALCULATE(DISTINCTCOUNT('Active Students LY'[STUDENT_ID]),'Active Students LY'[FIRST_GEN_CHECK]<>BLANK())
+			VAR FirstGenStudents = CALCULATE(DISTINCTCOUNT('Active Students LY'[STUDENT_ID]),'Active Students LY'[FIRST_GEN_CHECK]="Y")
+			RETURN
+			DIVIDE(FirstGenStudents,TotalStudents,0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 1696b2d4-5de4-4cdd-b4a9-f7f400142734
+
+	measure STUDENT_ID_COUNT_LY =
+			
+			VAR STUDENT = CALCULATE(DISTINCTCOUNT('Active Students LY'[STUDENT_PROGRAMS_ID]))
+			RETURN
+			IF(STUDENT=BLANK(),0,STUDENT)
+		formatString: #,0
+		lineageTag: 46fc542e-f9f6-40da-8e9b-2db5e2565acf
+
+	column STUDENT_ID
+		dataType: string
+		lineageTag: 09040137-c176-4c90-bbbe-dafc3ae5c3cf
+		summarizeBy: none
+		sourceColumn: STUDENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PROGRAM_ID
+		dataType: string
+		lineageTag: bbb105f7-11fb-4b57-aedc-ab11f13d7b48
+		summarizeBy: none
+		sourceColumn: PROGRAM_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column MOST_RECENT_PROGRAM
+		dataType: int64
+		formatString: 0
+		lineageTag: 8cc2af00-a9a0-4780-b40a-895bb42427c5
+		summarizeBy: sum
+		sourceColumn: MOST_RECENT_PROGRAM
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENT_PROGRAMS_ID
+		dataType: string
+		lineageTag: 9b93742d-9ddb-4c2e-9141-c70f505e2b37
+		summarizeBy: none
+		sourceColumn: STUDENT_PROGRAMS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_LOCATION
+		dataType: string
+		lineageTag: 1af03430-e41b-4cfe-bcc3-e81be71a6e51
+		summarizeBy: none
+		sourceColumn: STPR_LOCATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_ADMIT_STATUS
+		dataType: string
+		lineageTag: 74c62fcd-f59d-4c04-917c-a82e1e0deeff
+		summarizeBy: none
+		sourceColumn: STPR_ADMIT_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_STATUS
+		dataType: string
+		lineageTag: 0d120df0-df7b-4598-a242-ad5667a40946
+		summarizeBy: none
+		sourceColumn: STPR_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_STATUS_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: dbce198b-18e6-484f-b20b-193c00a246a2
+		summarizeBy: none
+		sourceColumn: STPR_STATUS_DATE
+
+		variation Variation
+			isDefault
+			relationship: ec31d496-b303-495b-87e3-be36361d803c
+			defaultHierarchy: LocalDateTable_ee9f5b2f-66d4-4e8c-a198-28862dbe9938.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_START_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 44eeaf58-86b0-40c1-8429-7980f5c1bb38
+		summarizeBy: none
+		sourceColumn: STPR_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: 99d83004-52f0-474e-8484-402023bdd83d
+			defaultHierarchy: LocalDateTable_23abee39-c760-4430-9d00-f5576668f648.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_END_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6cb02561-e571-4437-b7d9-e4a781435787
+		summarizeBy: none
+		sourceColumn: STPR_END_DATE
+
+		variation Variation
+			isDefault
+			relationship: 3115505d-d988-48fc-820f-115a0d878e37
+			defaultHierarchy: LocalDateTable_01f3744c-6e9b-4a43-bd35-9dbeaa23b230.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramStatus
+		dataType: string
+		lineageTag: 7dbdd050-c0f0-49cc-b464-e615504a66c3
+		summarizeBy: none
+		sourceColumn: ProgramStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column Next_STPR_STATUS_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 54a2c5a9-5f81-4417-b749-e905b9a53271
+		summarizeBy: none
+		sourceColumn: Next_STPR_STATUS_DATE
+
+		variation Variation
+			isDefault
+			relationship: 45616faa-f7c0-452e-8b35-8995c53e7af6
+			defaultHierarchy: LocalDateTable_e3916aff-3e00-4378-8ed7-950d09db208d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column LOC_DESC
+		dataType: string
+		lineageTag: 04fcefd0-7ba6-44df-9ff6-56e161cff32d
+		summarizeBy: none
+		sourceColumn: LOC_DESC
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIRST_NAME
+		dataType: string
+		lineageTag: 1253512d-0e79-49fd-871d-0dbd27648d73
+		summarizeBy: none
+		sourceColumn: FIRST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAST_NAME
+		dataType: string
+		lineageTag: 6a141446-8f43-4fe4-b5be-7e09ee96e189
+		summarizeBy: none
+		sourceColumn: LAST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReportDate
+		dataType: dateTime
+		formatString: Mm/dd/yyyy
+		lineageTag: 53d6b2e5-3dec-4f22-956d-74d8fd9babeb
+		summarizeBy: none
+		sourceColumn: ReportDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 1a50c673-ea3b-4303-8440-044a2e0a4af3
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIRST_GEN_CHECK
+		dataType: string
+		lineageTag: 4a967dad-ebc2-4451-a56a-ce5a961158e3
+		summarizeBy: none
+		sourceColumn: FIRST_GEN_CHECK
+
+		annotation SummarizationSetBy = Automatic
+
+	column AgeLY
+		dataType: int64
+		formatString: 0
+		lineageTag: af72b1a9-047c-4211-bb9a-b492f802eaf2
+		summarizeBy: sum
+		sourceColumn: AgeLY
+
+		annotation SummarizationSetBy = Automatic
+
+	column GENDER
+		dataType: string
+		lineageTag: 0bc68981-3914-4ffc-8df0-eacc0c7afb5b
+		summarizeBy: none
+		sourceColumn: GENDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column IPEDSEthnicity
+		dataType: string
+		lineageTag: e6e7a411-3835-45a1-b002-d6e6bd428a7b
+		summarizeBy: none
+		sourceColumn: IPEDSEthnicity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Active Students LY' = m
+		mode: import
+		queryGroup: Students
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="--for one year in the past: #(lf)/*#(lf)need to put date one year ago between STPR_START_DATE AND STPR_END_DATE#(lf)need to remove STPR_STATUS POS filter. Need to view historical statuses. #(lf)Possible solution to choose correct status? Take the LEAD(STPR_STATUS) OVER (PARTITION BY STUDNET_PROGRAMS_ID ORDER BY STPR_STATUS DATE DESC) as Next_STPR_STATUS_DATE#(lf)Then, join where @lastyear between STPR_STATUS_DATE and Next_STPR_STATUS_DATE. Finally, filter to active students. This should give you active 1 year ago. #(lf)*/#(lf)DECLARE @LASTYEAR DATE = DATEADD(YEAR, -1, GETDATE())#(lf)--SELECT COUNT(*) FROM STPR_DATES#(lf)--WHERE  @LASTYEAR BETWEEN STPR_START_DATE AND STPR_END_DATE#(lf)--AND POS = 1#(lf);WITH StudentProgram#(lf)AS (#(lf)#(tab)SELECT LEFT(SP.STUDENT_PROGRAMS_ID, 7) STUDENT_ID#(lf)#(tab)#(tab),RIGHT(SP.STUDENT_PROGRAMS_ID, LEN(SP.STUDENT_PROGRAMS_ID) - 8) PROGRAM_ID#(lf)#(tab)#(tab),ROW_NUMBER() OVER (#(lf)#(tab)#(tab)#(tab)PARTITION BY LEFT(SP.STUDENT_PROGRAMS_ID, 7) ORDER BY D.STPR_START_DATE DESC#(lf)#(tab)#(tab)#(tab)) MOST_RECENT_PROGRAM#(lf)#(tab)#(tab),SP.STUDENT_PROGRAMS_ID#(lf)#(tab)#(tab),SP.STPR_LOCATION#(lf)#(tab)#(tab),SP.STPR_ADMIT_STATUS#(lf)#(tab)#(tab),SPS.STPR_STATUS#(lf)#(tab)#(tab),SPS.STPR_STATUS_DATE#(lf)#(tab)#(tab),D.STPR_START_DATE#(lf)#(tab)#(tab),D.STPR_END_DATE#(lf)#(tab)#(tab),V.VAL_EXTERNAL_REPRESENTATION ProgramStatus#(lf)#(tab)#(tab),COALESCE(LEAD(STPR_STATUS_DATE) OVER (PARTITION BY SP.STUDENT_PROGRAMS_ID ORDER BY STPR_STATUS_DATE ASC), GETDATE()) as Next_STPR_STATUS_DATE#(lf)#(tab)#(tab)--,COALESCE(LEAD(STPR_STATUS) OVER (PARTITION BY STUDENT_PROGRAMS_ID ORDER BY STPR_STATUS_DATE ASC), GETDATE()) as Next_STPR_STATUS_DATE#(lf)#(tab)FROM STUDENT_PROGRAMS SP#(lf)#(tab)LEFT JOIN STPR_DATES D ON SP.STUDENT_PROGRAMS_ID = D.STUDENT_PROGRAMS_ID#(lf)#(tab)#(tab)AND D.POS = 1#(lf)#(tab)LEFT JOIN STPR_STATUSES SPS ON SP.STUDENT_PROGRAMS_ID = SPS.STUDENT_PROGRAMS_ID#(lf)#(tab)#(tab)--AND SPS.POS = 1#(lf)#(tab)LEFT JOIN VALS V ON SPS.STPR_STATUS = V.VAL_INTERNAL_CODE#(lf)#(tab)#(tab)AND V.VALCODE_ID = 'STUDENT.PROGRAM.STATUSES'#(lf)#(tab)WHERE 1 = 1#(lf)#(tab)--AND @LASTYEAR BETWEEN STPR_START_DATE AND STPR_END_DATE#(lf)#(tab))#(lf)#(tab)#(lf)#(tab),#(lf)#(tab)ACCEPTABLE_TERMS AS#(lf)#(tab)(#(lf)#(tab)#(tab)SELECT CASE WHEN @LASTYEAR BETWEEN CT.TERM_START_DATE AND CT.TERM_END_DATE#(lf)#(tab)#(tab)THEN CT.TERMS_ID#(lf)#(tab)#(tab)ELSE PT.PREV_TERM END TERM_TO_BE_USED#(lf)#(tab)#(tab)FROM TERMS CT#(lf)#(tab)#(tab)INNER JOIN (#(lf)#(tab)#(tab)#(tab)SELECT  TERMS_ID,#(lf)#(tab)#(tab)#(tab)LAG(TERMS_ID) OVER (ORDER BY TERM_START_DATE) PREV_TERM, #(lf)#(tab)#(tab)#(tab) LAG(TERM_END_DATE) OVER (ORDER BY TERM_START_DATE) PREV_END_DATE#(lf)#(tab)#(tab)#(tab)FROM TERMS#(lf)#(tab)#(tab)#(tab)WHERE RIGHT(TERMS_ID, 1) = 'Q'#(lf)#(tab)#(tab)#(tab)#(tab))PT ON CT.TERMS_ID = PT.TERMS_ID#(lf)#(tab)#(tab)WHERE RIGHT(CT.TERMS_ID, 1) = 'Q'#(lf)#(tab)#(tab)AND @LASTYEAR BETWEEN PT.PREV_END_DATE AND CT.TERM_END_DATE#(lf)#(tab)#(tab)UNION#(lf)#(tab)#(tab)SELECT TERMS_ID TERM_TO_BE_USED#(lf)#(tab)#(tab)FROM TERMS#(lf)#(tab)#(tab)WHERE @LASTYEAR BETWEEN TERM_START_DATE AND TERM_END_DATE#(lf)#(tab)),#(lf)#(tab)--SELECT * FROM ACCEPTABLE_TERMS#(lf)ENROLLED_IN_CLASS AS (#(lf)#(tab)SELECT DISTINCT SCS_STUDENT #(lf)#(tab)FROM STUDENT_COURSE_SEC SCS#(lf)#(tab)INNER JOIN STC_STATUSES STC ON SCS.SCS_STUDENT_ACAD_CRED = STC.STUDENT_ACAD_CRED_ID AND STC.POS = 1#(lf)#(tab)INNER JOIN COURSE_SECTIONS CS ON SCS.SCS_COURSE_SECTION = CS.COURSE_SECTIONS_ID#(lf)#(tab)INNER JOIN ACCEPTABLE_TERMS T ON CS.SEC_TERM = T.TERM_TO_BE_USED#(lf)#(tab)WHERE STC.STC_STATUS IN ('A','N')#(lf)),#(lf)Ethnicity AS (SELECT DISTINCT STUDENT_ID, IPEDS_RACE_ETHNIC_DESC #(lf)FROM STUDENT_ACAD_PROGRAMS_VIEW WITH (NOLOCK))#(lf)#(lf)--Possible solution to choose correct status? Take the LEAD(STPR_STATUS) OVER (PARTITION BY STUDNET_PROGRAMS_ID ORDER BY STPR_STATUS DATE DESC) as Next_STPR_STATUS_DATE#(lf)SELECT * FROM (#(lf)SELECT SP.*, L.LOC_DESC, P.FIRST_NAME, P.LAST_NAME, @LASTYEAR ReportDate, YEAR(@LASTYEAR) Year, DATEDIFF(yy, P.BIRTH_DATE, @LASTYEAR) Age, P.GENDER, E.IPEDS_RACE_ETHNIC_DESC #(lf)FROM StudentProgram SP#(lf)LEFT JOIN LOCATIONS L ON SP.STPR_LOCATION = L.LOCATIONS_ID#(lf)INNER JOIN PERSON P ON SP.STUDENT_ID = P.ID#(lf)INNER JOIN ENROLLED_IN_CLASS EIC ON SP.STUDENT_ID = EIC.SCS_STUDENT#(lf)LEFT JOIN Ethnicity E ON E.STUDENT_ID = SP.STUDENT_ID#(lf)) A#(lf)WHERE @LASTYEAR BETWEEN STPR_STATUS_DATE and Next_STPR_STATUS_DATE#(lf)AND STPR_STATUS = 'A'#(lf)--AND STPR_START_DATE <= GETDATE()#(lf)--AND PROGRAM_ID IN (@program)#(lf)--AND STPR_LOCATION IN (@campus)"]),
+				    #"Merged Queries" = Table.NestedJoin(Source, {"STUDENT_ID"}, Diversity_FirstGen, {"studentId"}, "Diversity_FirstGen", JoinKind.LeftOuter),
+				    #"Expanded Diversity_FirstGen" = Table.ExpandTableColumn(#"Merged Queries", "Diversity_FirstGen", {"FIRST_GEN_CHECK"}, {"FIRST_GEN_CHECK"}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Expanded Diversity_FirstGen",null,"N/A",Replacer.ReplaceValue,{"GENDER"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Replaced Value",{{"Age", "AgeLY"}, {"IPEDS_RACE_ETHNIC_DESC", "IPEDSEthnicity"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

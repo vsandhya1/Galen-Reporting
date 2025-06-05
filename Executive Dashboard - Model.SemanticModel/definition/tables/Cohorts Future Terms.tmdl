@@ -1,0 +1,86 @@
+table 'Cohorts Future Terms'
+	lineageTag: 05dbfe2b-5197-4240-be2f-cee618d0efff
+
+	measure 'Future Terms​' = ```
+			
+			    VAR FINAL = CALCULATE(
+			        DISTINCTCOUNT('Cohorts Future Terms'[STUDENT_PROGRAMS_ID]))
+			RETURN
+			IF(FINAL=BLANK(),0,FINAL)
+			
+			
+			```
+		formatString: #,0
+		lineageTag: ea08f49d-3f32-46c0-ac44-dd9b47220f79
+
+	measure 'Previous Terms​' = CALCULATE(DISTINCTCOUNT('Cohorts Future Terms'[STUDENT_PROGRAMS_ID]),SAMEPERIODLASTYEAR('Cohorts Future Terms'[STPR_START_DATE]))
+		formatString: 0
+		lineageTag: a9312c4d-6424-42a6-b3a5-429dda7234ea
+
+	column STUDENT_PROGRAMS_ID
+		dataType: string
+		lineageTag: 62b6d755-77bf-4871-b1a0-c6d68fe71bd7
+		summarizeBy: none
+		sourceColumn: STUDENT_PROGRAMS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_START_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7c8de927-3477-4844-a654-9d8fd39aa398
+		summarizeBy: none
+		sourceColumn: STPR_START_DATE
+
+		variation Variation
+			isDefault
+			relationship: e269c4c0-ba94-4ad6-8c02-8a1268be976c
+			defaultHierarchy: LocalDateTable_307b996b-7ba5-43e9-87d8-1534e5fa42ea.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_LOCATION
+		dataType: string
+		lineageTag: 507dc443-25ad-4c2e-bb40-ef6bf87c17bc
+		summarizeBy: none
+		sourceColumn: STPR_LOCATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENT_ID
+		dataType: string
+		lineageTag: b0f21e6f-a135-4f30-8cd5-dc9027fa93a9
+		summarizeBy: none
+		sourceColumn: STUDENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STPR_ADMIT_STATUS
+		dataType: string
+		lineageTag: f15ee97b-46f6-4a3e-8878-62f9c5b8b0f4
+		summarizeBy: none
+		sourceColumn: STPR_ADMIT_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column PROGRAM_ID
+		dataType: string
+		lineageTag: 170af69e-8bac-46ed-aeaf-d2b21a698ff8
+		summarizeBy: none
+		sourceColumn: PROGRAM_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Cohorts Future Terms' = m
+		mode: import
+		queryGroup: 'New Starts'
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="DECLARE @CURRENTDATE DATE = GETDATE();#(lf)#(lf)DROP TABLE IF EXISTS #FUTURE_TERMS_NEW_STARTS, #TERMS_GROUND, #TERMS_ONLINE, #TERMS;#(lf)#(lf)SELECT TOP 1 TERMS_ID, TERM_START_DATE, TERM_END_DATE#(lf)INTO #TERMS_GROUND#(lf)FROM TERMS T#(lf)WHERE RIGHT(T.TERMS_ID, 1) = 'Q'#(lf)  AND @CURRENTDATE < TERM_START_DATE#(lf)ORDER BY TERM_START_DATE ASC;#(lf)#(lf)SELECT TOP 1 TERMS_ID, TERM_START_DATE, TERM_END_DATE#(lf)INTO #TERMS_ONLINE#(lf)FROM TERMS T#(lf)WHERE RIGHT(T.TERMS_ID, 1) <> 'Q'#(lf)  AND @CURRENTDATE < TERM_START_DATE#(lf)ORDER BY TERM_START_DATE ASC;#(lf)#(lf)SELECT * #(lf)INTO #TERMS #(lf)FROM (#(lf)  SELECT * FROM #TERMS_GROUND#(lf)  UNION#(lf)  SELECT * FROM #TERMS_ONLINE#(lf)) M;#(lf)#(lf)SELECT SP.STUDENT_PROGRAMS_ID,#(lf)       LEFT(SP.STUDENT_PROGRAMS_ID, 7) AS STUDENT_ID,#(lf)       SP.STPR_LOCATION,#(lf)       MIN(SPD.STPR_START_DATE) AS STPR_START_DATE,#(lf)       SP.STPR_ADMIT_STATUS,#(lf)       RIGHT(SP.STUDENT_PROGRAMS_ID, LEN(SP.STUDENT_PROGRAMS_ID) - 8) AS PROGRAM_ID#(lf)INTO #FUTURE_TERMS_NEW_STARTS#(lf)FROM STUDENT_PROGRAMS SP#(lf)INNER JOIN STPR_DATES SPD ON SP.STUDENT_PROGRAMS_ID = SPD.STUDENT_PROGRAMS_ID#(lf)INNER JOIN STPR_STATUSES SPS ON SP.STUDENT_PROGRAMS_ID = SPS.STUDENT_PROGRAMS_ID AND SPS.POS = 1#(lf)WHERE SPS.STPR_STATUS IN ('A')#(lf)GROUP BY SP.STUDENT_PROGRAMS_ID, SP.STPR_LOCATION, SP.STPR_ADMIT_STATUS#(lf)HAVING MIN(SPD.STPR_START_DATE) IN (SELECT TERM_START_DATE FROM #TERMS);#(lf)#(lf)SELECT * FROM #FUTURE_TERMS_NEW_STARTS;#(lf)"])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

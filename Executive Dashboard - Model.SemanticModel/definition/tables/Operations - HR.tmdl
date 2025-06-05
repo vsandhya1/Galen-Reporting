@@ -1,0 +1,341 @@
+table 'Operations - HR'
+	lineageTag: 7fcd0e6e-6508-4781-9481-48050cec74a1
+
+	measure Main_Count = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="MAIN")+0
+		formatString: #,0
+		lineageTag: 8131566c-0add-4ee0-b071-e2f5385ef45b
+
+		changedProperty = IsHidden
+
+	measure All_Campus = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]<>"MAIN")+0
+		formatString: #,0
+		lineageTag: 24d71dc6-83e0-4d43-976d-634cfcc0f834
+
+		changedProperty = IsHidden
+
+	measure FUll_Time_STaff =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Staff" && 'Operations - HR'[auxillary_status] = "FT" && 'Operations - HR'[Campus]<>"Main")+0
+		formatString: #,0
+		lineageTag: e41ae5d7-f5ab-41f1-a53e-8951a4d7538e
+
+		changedProperty = IsHidden
+
+	measure PT_STaff =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status]IN{"PT","PRN"},'Operations - HR'[campus]<>"Main")+0
+		formatString: #,0
+		lineageTag: 2db9984a-3ca5-457e-8714-62de8c0d4edb
+
+	measure PT_Faculty =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]IN{"PT","PRN"},'Operations - HR'[campus]<>"Main")+0
+		formatString: #,0
+		lineageTag: b11da4c8-3498-4ab6-ac82-becd3ba63ce2
+
+	measure FUll_Time_Faculty =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]="FT",'Operations - HR'[campus]<>"Main")+0
+		formatString: #,0
+		lineageTag: 9cab8684-4984-4d4c-948b-68907aa2818d
+
+	measure Main_Staff_FT = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status]IN{"FT"},'Operations - HR'[Campus]="Main")+0
+		formatString: #,0
+		lineageTag: 7976e552-a06b-4b25-8371-421c397ab864
+
+		changedProperty = IsHidden
+
+	measure Main_Staff_PT = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status] IN{"PT","PRN"},'Operations - HR'[campus]="Main")+0
+		formatString: #,0
+		lineageTag: 543f1031-385c-477c-a0c5-a8b09fe7f52b
+
+	measure Hired_New = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[new_hire_indicator]=1)+0
+		formatString: #,0
+		lineageTag: 1f0f0d5c-3410-402a-865e-d73ba41491c2
+
+	measure Main_Hired =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="Main",'Operations - HR'[new_hire_indicator]=1)+0
+		formatString: #,0
+		lineageTag: 5b0d5924-cb1e-4c66-9faa-f7dba4d56ebf
+
+	measure All_Campus_Hired =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]<>"Main",'Operations - HR'[new_hire_indicator]=1)+0
+		formatString: #,0
+		lineageTag: 13b0faf7-20e7-44b8-af35-205d75e6f4f5
+
+	measure All_Campus_Hired_Staff =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]<>"Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status]="FT")+0
+		formatString: #,0
+		lineageTag: a2b60ea3-db10-4a9a-a6b5-1b00b1a0ffd7
+
+	measure All_Campus_Hired_Staff_PT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]<>"Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status]IN{"PT","PRN"})+0
+		formatString: #,0
+		lineageTag: 11c8ffd2-7484-4286-93d3-f8f94acbc2e2
+
+	measure All_Campus_Hired_Faculty_FT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]<>"Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]="FT")+0
+		formatString: #,0
+		lineageTag: 5741edb1-bb82-43e6-ac42-3f073ea02a51
+
+	measure All_Campus_Hired_Faculty_PT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]<>"Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]IN{"PT","PRN"})+0
+		formatString: #,0
+		lineageTag: aeef0ecd-230e-4ab8-8f7f-31d6ddb9ae4d
+
+	measure Main_Campus_Hired_Staff_FT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status]="FT")+0
+		formatString: #,0
+		lineageTag: bbbb3893-dc66-44d4-89f7-72b8c13f7634
+
+	measure Main_Campus_Hired_Staff_PT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Staff",'Operations - HR'[auxillary_status]IN{"PT","PRN"})+0
+		formatString: #,0
+		lineageTag: dcc830f6-993b-4b6b-b1ad-f0aff4f63033
+
+	measure Main_Faculty_FT = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]IN{"FT"},'Operations - HR'[Campus]="Main")+0
+		formatString: #,0
+		lineageTag: 6023201c-607a-4a64-88bc-14d141311380
+
+	measure Main_Faculty_PT = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status] IN{"PT","PRN"},'Operations - HR'[Campus]="Main")+0
+		formatString: #,0
+		lineageTag: 82cf8333-0297-4e7e-9006-0a2821514ebd
+
+	measure Main_Campus_Hired_Faculty_FT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]="Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]="FT")+0
+		formatString: #,0
+		lineageTag: 22453fbf-7964-4f4a-814e-41ab9f8d7633
+
+	measure Main_Campus_Hired_Faculty_PT =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="Main",'Operations - HR'[new_hire_indicator]=1,'Operations - HR'[Employee_Type]="Faculty",'Operations - HR'[auxillary_status]IN{"PT","PRN"})+0
+		formatString: #,0
+		lineageTag: 3718f1c9-06ec-49b6-b172-a0710141ec2e
+
+	measure CountAllRows = ```
+			COALESCE(COUNTROWS('Operations - HR'), 0)
+			
+			
+			```
+		formatString: #,0
+		lineageTag: 9cd2733d-8529-4c9f-b632-3504efea2525
+
+	measure Main_Staff_Count = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="MAIN", 'Operations - HR'[Employee_Type]="Staff")+0
+		formatString: 0
+		lineageTag: ae0cc27b-a72c-4b84-97da-9780d5476ea3
+
+	measure Main_Faculty_Count = CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]="MAIN", 'Operations - HR'[Employee_Type] ="Faculty")+0
+		formatString: 0
+		lineageTag: 6d7df68a-8a88-4f12-ac06-b795958dd634
+
+	measure Main_Hired_Staff =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[campus]="Main",'Operations - HR'[new_hire_indicator]=1, 'Operations - HR'[Employee_Type] = "Staff")+0
+		formatString: 0
+		lineageTag: 8f40d259-7e83-4d91-ba42-6889ba2bb767
+
+	measure Main_Hired_Faculty =
+			
+			CALCULATE(COUNT('Operations - HR'[id]),'Operations - HR'[Campus]="Main",'Operations - HR'[new_hire_indicator]=1, 'Operations - HR'[Employee_Type]="Faculty")+0
+		formatString: 0
+		lineageTag: 95f56783-265b-4a43-a300-737d9066b4f8
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: b5030f1a-21f4-4231-a25c-3bc578a57d0e
+		summarizeBy: sum
+		sourceColumn: id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column person_id
+		dataType: string
+		lineageTag: c941266f-1044-40f2-aca7-f1bf781213cb
+		summarizeBy: none
+		sourceColumn: person_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column auxillary_status
+		dataType: string
+		lineageTag: d281f41e-9559-4cb9-9d0b-884efac169f2
+		summarizeBy: none
+		sourceColumn: auxillary_status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employee_Type
+		dataType: string
+		lineageTag: 93316d13-274f-4a0c-a450-f60d5db625da
+		summarizeBy: none
+		sourceColumn: Employee_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column campus
+		dataType: string
+		lineageTag: 0a4bce5e-5b91-48ea-8d02-d6dcc5e353c5
+		summarizeBy: none
+		sourceColumn: campus
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_hire_indicator
+		dataType: int64
+		formatString: 0
+		lineageTag: 963abcc4-6131-4d51-84e9-2f982bbff20f
+		summarizeBy: sum
+		sourceColumn: new_hire_indicator
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_hired
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 417af857-4bd0-49c3-8023-b0d9d923a8b7
+		summarizeBy: none
+		sourceColumn: date_hired
+
+		variation Variation
+			isDefault
+			relationship: 02fb516c-5c3b-4c41-b75e-9b867579d922
+			defaultHierarchy: LocalDateTable_4d03d487-63cc-41f6-9476-12dfebb1ac51.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campus_New = ```
+			
+			IF(
+			    [Campus] = "DEN", 
+			    "AUR", -- Map Denver to Aurora
+			    LOOKUPVALUE(
+			        'Campus Region'[LOCATIONS_ID], 
+			        'Campus Region'[LOCATIONS_ID], 
+			        [Campus], 
+			        "OTHER"
+			    )
+			)
+			
+			```
+		lineageTag: ceb9fd1e-dd9a-41f9-9a58-81b9c1b94832
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column email_address
+		dataType: string
+		lineageTag: 7edaf603-c8e8-41cb-80ef-d54fd5247c51
+		summarizeBy: none
+		sourceColumn: email_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column position_number
+		dataType: string
+		lineageTag: fefcd5ec-45bf-44d6-85b9-8cbaece0879d
+		summarizeBy: none
+		sourceColumn: position_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column position_desc
+		dataType: string
+		lineageTag: a033fcb3-1a9f-4847-954a-a9c2ec2dc4a3
+		summarizeBy: none
+		sourceColumn: position_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column job_cd_desc
+		dataType: string
+		lineageTag: fbf971b7-1486-4404-81d0-a1c0952c33f0
+		summarizeBy: none
+		sourceColumn: job_cd_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column job_cd
+		dataType: string
+		lineageTag: 3eb527e1-718a-4cb9-b6c3-b18bfa10bd4f
+		summarizeBy: none
+		sourceColumn: job_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_cd
+		dataType: string
+		lineageTag: d336b9e2-0f24-46a9-9274-2ae26fa8e6be
+		summarizeBy: none
+		sourceColumn: location_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_cd_desc
+		dataType: string
+		lineageTag: 66d9b880-7f8e-459a-a4ea-6ecc55790dd3
+		summarizeBy: none
+		sourceColumn: location_cd_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column dept_desc_home_curr
+		dataType: string
+		lineageTag: cedb9e5a-e649-4b3d-9e2e-32dafaa52418
+		summarizeBy: none
+		sourceColumn: dept_desc_home_curr
+
+		annotation SummarizationSetBy = Automatic
+
+	column employee_full_name
+		dataType: string
+		lineageTag: 5c00a439-8fc4-4b10-886d-7bb2dbfdbe9b
+		summarizeBy: none
+		sourceColumn: employee_full_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Full_ID = 'Operations - HR'[Campus_New] & 'Operations - HR'[person_id]
+		lineageTag: 5957e92a-b0d6-4273-941b-b371241e2081
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Operations - HR' = m
+		mode: import
+		queryGroup: Faculty
+		source =
+				let
+				    Source = MySQL.Database("LinuxDB01", "account_admin", [ReturnSingleDatabase=true, Query="select #(lf)id, #(lf)person_id,#(lf)employee_full_name,#(lf)email_address,#(lf)auxillary_status,#(lf)position_number,#(lf)position_desc,#(lf)job_cd_desc,#(lf)job_cd,#(lf)location_cd,#(lf)location_cd_desc,#(lf)CASE WHEN job_cd IN (10080, 10081, 10082, 10083, 10085) #(lf)THEN 'Faculty'#(lf)ELSE 'Staff'#(lf)END AS Employee_Type,#(lf)CASE#(lf)                WHEN UPPER(LEFT(dept_desc_home_curr,3))='TAM' THEN 'TPA'#(lf)                WHEN UPPER(LEFT(dept_desc_home_curr,3))='MAI' THEN 'MAIN'#(lf)                WHEN UPPER(LEFT(dept_desc_home_curr,3))='ISL' THEN 'MAIN'#(lf)                WHEN UPPER(LEFT(dept_desc_home_curr,3))='ADM' THEN 'MAIN'#(lf)                WHEN UPPER(LEFT(dept_desc_home_curr,3)) IS NULL THEN 'MAIN'#(lf)                ELSE UPPER(LEFT(dept_desc_home_curr,3))#(lf)END AS campus,#(lf)dept_desc_home_curr,#(lf)CASE WHEN year(date_hired) = year(now())#(lf)THEN 1#(lf)ELSE 0#(lf)END AS new_hire_indicator,#(lf)date_hired#(lf)from account_admin.hr_raws#(lf)where active = 1#(lf)"])
+				in
+				    Source
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

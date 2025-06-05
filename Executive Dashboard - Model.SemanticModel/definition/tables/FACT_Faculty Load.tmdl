@@ -1,0 +1,204 @@
+table 'FACT_Faculty Load'
+	lineageTag: ea2adb60-7bb3-4ea7-9f98-10fbc53e5061
+
+	measure FacultyLoadSwitch =
+			SWITCH(TRUE(),
+			SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Overload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 1,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[1 Group]="Overload"),SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Meeting Load" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 1,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[1 Group]="Meeting Load"), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 1,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[1 Group]="Underload"), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload >2 Qtrs" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 1,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[Underload 1]=1),
+			SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Overload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 2,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[2]>32),SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Meeting Load" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 2,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[2]>=28 && 'FACT_Faculty Load'[2]<=32), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 2,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[2]<28 && 'FACT_Faculty Load'[2]<> BLANK()), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload >2 Qtrs" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 2,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[Underload 2]=1),
+			SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Overload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 3,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[3]>32),SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Meeting Load" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 3,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[3]>=28 && 'FACT_Faculty Load'[3]<=32), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 3,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[3]<28 && 'FACT_Faculty Load'[3]<> BLANK()), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload >2 Qtrs" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 3,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[Underload 3]=1),
+			SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Overload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 4,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[4]>32),SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Meeting Load" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 4,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[4]>=28 && 'FACT_Faculty Load'[4]<=32), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 4,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[4]<28 && 'FACT_Faculty Load'[4]<> BLANK()), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload >2 Qtrs" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 4,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[Underload 4]=1),
+			SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Overload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 5,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[5]>32),SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Meeting Load" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 5,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[5]>=28 && 'FACT_Faculty Load'[5]<=32), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 5,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[5]<28 && 'FACT_Faculty Load'[5]<> BLANK()), SELECTEDVALUE('DIM_Faculty Load'[Faculty Load])="# of Faculty Underload >2 Qtrs" && SELECTEDVALUE('DIM_Terms'[FacultyLoadTerms]) = 5,CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[Underload 5]=1)
+			,0)
+		formatString: 0
+		lineageTag: 02f70eff-50b2-4db8-ab3f-f59270f80613
+
+	measure 'Measure 2' = CALCULATE(DISTINCTCOUNT('FACT_Faculty Load'[Colleague_ID]),'FACT_Faculty Load'[1]<28 && 'FACT_Faculty Load'[1] <> BLANK() )
+		formatString: 0
+		lineageTag: 12443886-6a87-4d32-83fa-b2df51623892
+
+	column Colleague_ID
+		dataType: string
+		lineageTag: f19e77b1-985d-44f6-89c1-5a3e43bdcaf8
+		summarizeBy: none
+		sourceColumn: Colleague_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Full_Name
+		dataType: string
+		lineageTag: c43caf01-15d9-4f5b-bdca-5bd6b468c93f
+		summarizeBy: none
+		sourceColumn: Full_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEC_LOC
+		dataType: string
+		lineageTag: 74706311-e031-4336-8446-4d6c55bea6ec
+		summarizeBy: none
+		sourceColumn: SEC_LOC
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMP_JOB_DESCRIPTION
+		dataType: string
+		lineageTag: 30a2a4e7-1f72-44f9-adf0-e1fe1194bc50
+		summarizeBy: none
+		sourceColumn: EMP_JOB_DESCRIPTION
+
+		annotation SummarizationSetBy = Automatic
+
+	column 1
+		dataType: double
+		lineageTag: 2e878d92-ff7a-4f0a-8e18-5416e941850d
+		summarizeBy: sum
+		sourceColumn: 1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 2
+		dataType: double
+		lineageTag: 6415501c-d98f-4432-81c7-2df89a5fbf9e
+		summarizeBy: sum
+		sourceColumn: 2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 3
+		dataType: double
+		lineageTag: 4e970bc0-f0b2-45e4-b6ad-1438936b0e4c
+		summarizeBy: sum
+		sourceColumn: 3
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 4
+		dataType: double
+		lineageTag: 4a6f2f07-3f28-44a6-afab-859e901ae691
+		summarizeBy: sum
+		sourceColumn: 4
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 5
+		dataType: double
+		lineageTag: 816db1e6-68c1-47d1-8628-8e3e3e4df1ed
+		summarizeBy: sum
+		sourceColumn: 5
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 6
+		dataType: double
+		lineageTag: 6a94ef22-3fd7-4747-92c2-b93d05afdd7d
+		summarizeBy: sum
+		sourceColumn: 6
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 7
+		dataType: double
+		lineageTag: 73276802-d2c0-41f3-9308-ef54e467eeb4
+		summarizeBy: sum
+		sourceColumn: 7
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Underload 1' = IF(([1] <28 && ISBLANK([1])==FALSE()) && ([2] <28 && ISBLANK([2])=FALSE()), 1, 0)
+		formatString: 0
+		lineageTag: e6cae655-a27c-4221-bf82-e3bf0ff669bd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Underload 2' = IF(([2] <28 && ISBLANK([2])=FALSE()) && ([3] <28 && ISBLANK([3])=FALSE()), 1, 0)
+		formatString: 0
+		lineageTag: b2f4348e-5765-46a1-8826-df1d02ac19e7
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Underload 3' = IF(([3] <28 && ISBLANK([3])=FALSE()) && ([4] <28 && ISBLANK([4])=FALSE()), 1, 0)
+		formatString: 0
+		lineageTag: b43d167b-cd9b-4f5b-b203-0abb8750f78f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Underload 4' = IF(([4] <28 && ISBLANK([4])=FALSE()) && ([5] <28 && ISBLANK([5])=FALSE()), 1, 0)
+		formatString: 0
+		lineageTag: 109f8741-7fdc-41d7-9db5-9cf58f19d944
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Underload 5' = IF(([5] <28 && ISBLANK([5])=FALSE()) && ([6] <28 && ISBLANK([6])=FALSE()), 1, 0)
+		formatString: 0
+		lineageTag: b46956e8-5695-4b80-9c8e-2ed9f78538b7
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column '1 Group' = SWITCH(TRUE(),[1]==0, "Underload",[1] == BLANK(),"Exclude",[1]>=28 && [1] <=32,"Meeting Load",[1]>32,"Overload",[1]<28,"Underload")
+		lineageTag: f2f93c0d-f6dd-440f-830f-25689b9d3df2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2 Group' = SWITCH(TRUE(),[2]==0, "Underload",[2] == BLANK(),"Exclude",[2]>=28 && [2] <=32,"Meeting Load",[2]>32,"Overload",[2]<28,"Underload")
+		lineageTag: 7bf9e3c0-f00e-4134-87b0-ce0dc5de36c3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '3 Group' = SWITCH(TRUE(),[3]==0, "Underload",[3] == BLANK(),"Exclude",[3]>=28 && [3] <=32,"Meeting Load",[3]>32,"Overload",[3]<28,"Underload")
+		lineageTag: e0442976-dd08-4912-b46e-8f34d43e1493
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '4 Group' = SWITCH(TRUE(),[4]==0, "Underload",[4] == BLANK(),"Exclude",[4]>=28 && [4] <=32,"Meeting Load",[4]>32,"Overload",[4]<28,"Underload")
+		lineageTag: 4bf175cb-5287-4539-bf1b-905e06a8e0bd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '5 Group' = SWITCH(TRUE(),[5]==0, "Underload",[5] == BLANK(),"Exclude",[5]>=28 && [5] <=32,"Meeting Load",[5]>32,"Overload",[5]<28,"Underload")
+		lineageTag: a0f9e8ea-9025-4b03-b221-9d8e6ce14e4c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FACT_Faculty Load' = m
+		mode: import
+		queryGroup: Faculty
+		source =
+				let
+				    Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="DROP TABLE IF EXISTS #Final;#(lf)#(lf)with#(lf)LAWSON as (#(lf)SELECT DISTINCT ID#(lf),Max(PERSON_ALT_IDS) as Lawson_id#(lf)FROM PERSON_ALT#(lf)WHERE PERSON_ALT_ID_TYPES = 'LAWA'#(lf)GROUP BY ID#(lf)),#(lf)EL_GROUP as (#(lf)SELECT PERSON.ID,PERSON_LS.GROUPS#(lf)FROM  PERSON  LEFT JOIN PERSON_LS ON PERSON.ID= PERSON_LS.ID#(lf)WHERE PERSON_LS.GROUPS LIKE 'El=%'#(lf)),#(lf)ST_GROUP as (#(lf)SELECT PERSON.ID,PERSON_LS.GROUPS#(lf)FROM  PERSON  LEFT JOIN PERSON_LS ON PERSON.ID= PERSON_LS.ID#(lf)WHERE PERSON_LS.GROUPS LIKE  '%ft' or  PERSON_LS.GROUPS LIKE  '%pt'#(lf)),#(lf)JD_GROUP as (#(lf)SELECT PERSON.ID,PERSON_LS.GROUPS#(lf)FROM  PERSON  LEFT JOIN PERSON_LS ON PERSON.ID= PERSON_LS.ID#(lf)WHERE PERSON_LS.GROUPS LIKE  'Jd=%'#(lf)),#(lf)#(lf)MAX_SEC_CONTACT AS (#(lf)SELECT COURSE_SECTIONS_ID, MAX(SEC_CONTACT_HOURS) as SEC_CONTACT_HOURS FROM SEC_CONTACT#(lf)group by COURSE_SECTIONS_ID#(lf)),#(lf)ACTIVE_STUDENTS as (#(lf)SELECT COURSE_SECTIONS.COURSE_SECTIONS_ID, count(STUDENT_COURSE_SEC.SCS_STUDENT) As ACTIVE_STUDENT_COUNT#(lf)FROM COURSE_SECTIONS#(lf)INNER JOIN SEC_STATUSES on COURSE_SECTIONS.COURSE_SECTIONS_ID =SEC_STATUSES.COURSE_SECTIONS_ID and SEC_STATUSES.POS=1#(lf)INNER JOIN STUDENT_COURSE_SEC  ON STUDENT_COURSE_SEC.SCS_COURSE_SECTION= COURSE_SECTIONS.COURSE_SECTIONS_ID#(lf)INNER JOIN STC_STATUSES on STC_STATUSES.STUDENT_ACAD_CRED_ID=STUDENT_COURSE_SEC.SCS_STUDENT_ACAD_CRED and STC_STATUSES.POS=1#(lf)WHERE STC_STATUSES.STC_STATUS in ('N','A') and SEC_STATUSES.SEC_STATUS='A' #(lf)group by COURSE_SECTIONS.COURSE_SECTIONS_ID#(lf)),#(lf)Terms As #(lf)(SELECT TOP 7 TERM_START_DATE, TERMS_ID, ROW_NUMBER () OVER (ORDER BY TERM_START_DATE DESC) AS SO#(lf)#(tab)#(tab)FROM TERMS CT#(lf)#(tab)#(tab)WHERE RIGHT(CT.TERMS_ID, 1) = 'Q'#(lf)#(tab)#(tab)AND GETDATE() >= TERM_START_DATE#(lf)#(tab)#(tab)ORDER BY TERM_START_DATE DESC)#(lf)#(lf)SELECT IsNull(COURSE_SECTIONS.SEC_LOCATION, 'ONL') SEC_LOC#(tab), l.LOC_DESC SectionLocation,#(lf)     LR.LOCATION_REGIONS_ID, LR.LOCR_DESC#(lf)#(tab),ISNULL(PERSON.LAST_NAME, 'n/a') + ', ' + IsNull(PERSON.FIRST_NAME, 'n/a') Full_Name#(lf)#(tab),COURSE_SEC_FACULTY.CSF_FACULTY ""Colleague_ID""#(lf)#(tab),LAWSON.Lawson_id#(lf)#(tab),COURSE_SEC_FACULTY.CSF_FACULTY_LOAD#(lf)#(tab),COURSE_SECTIONS.SEC_NAME#(lf)#(tab),COURSE_SECTIONS.SEC_SHORT_TITLE#(lf)#(tab),SEC_CONTACT.SEC_CONTACT_HOURS#(lf)#(tab),COURSE_SECTIONS.SEC_NO_WEEKS#(lf)#(tab),COURSE_SECTIONS.SEC_START_DATE#(lf)#(tab),COURSE_SECTIONS.SEC_END_DATE#(lf)#(tab),SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01) ""Hours_Teaching""#(lf)#(tab),CASE#(lf)#(tab)#(tab)WHEN RIGHT(COURSE_SECTIONS.SEC_COURSE_NO, 1) IN ('L','C')#(lf)#(tab)#(tab)#(tab)THEN (SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01) * 0.25)#(lf)#(tab)#(tab)ELSE SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01)#(lf)#(tab)#(tab)END ""Hours_Prep_Time""#(lf)#(lf)#(tab),CASE#(lf)#(tab)#(tab)WHEN RIGHT(COURSE_SECTIONS.SEC_COURSE_NO, 1) = 'L' #(tab)#(tab)#(tab)THEN 'Lab'#(lf)#(tab)#(tab)WHEN RIGHT(COURSE_SECTIONS.SEC_COURSE_NO, 1) = 'C' #(tab)#(tab)#(tab)THEN 'Clinical'#(lf)#(tab)#(tab)ELSE 'Theory'#(lf)#(tab)#(tab)END ""CourseType""#(lf)#(lf)#(tab),SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01) + CASE#(lf)#(tab)#(tab)WHEN RIGHT(COURSE_SECTIONS.SEC_COURSE_NO, 1) IN ('L','C')#(lf)#(tab)#(tab)#(tab)THEN (SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01) * 0.25)#(lf)#(tab)#(tab)ELSE SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01)#(lf)#(tab)#(tab)END ""Hours""#(lf)#(lf)#(tab),CASE#(lf)#(tab)#(tab)WHEN DATEDIFF(wk, COURSE_SECTIONS.SEC_START_DATE, COURSE_SECTIONS.SEC_END_DATE) = 7 THEN 8#(lf)#(tab)#(tab)WHEN DATEDIFF(wk, COURSE_SECTIONS.SEC_START_DATE, COURSE_SECTIONS.SEC_END_DATE) = 11 THEN 12#(lf)#(tab)#(tab)ELSE DATEDIFF(wk, COURSE_SECTIONS.SEC_START_DATE, COURSE_SECTIONS.SEC_END_DATE)#(lf)#(tab)#(tab)END ""Weeks""#(lf)#(tab),(#(lf)#(tab)#(tab)SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01) + CASE#(lf)#(tab)#(tab)#(tab)WHEN RIGHT(COURSE_SECTIONS.SEC_COURSE_NO, 1) IN ('L','C')#(lf)#(tab)#(tab)#(tab)#(tab)THEN (SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01) * 0.25)#(lf)#(tab)#(tab)#(tab)ELSE SEC_CONTACT.SEC_CONTACT_HOURS * (COURSE_SEC_FACULTY.CSF_FACULTY_LOAD * .01)#(lf)#(tab)#(tab)#(tab)END#(lf)#(tab)#(tab)) / (#(lf)#(tab)#(tab)CASE#(lf)#(tab)#(tab)#(tab)WHEN DATEDIFF(wk, COURSE_SECTIONS.SEC_START_DATE, COURSE_SECTIONS.SEC_END_DATE) = 7 THEN 8#(lf)#(tab)#(tab)#(tab)WHEN DATEDIFF(wk, COURSE_SECTIONS.SEC_START_DATE, COURSE_SECTIONS.SEC_END_DATE) = 11 THEN 12#(lf)#(tab)#(tab)#(tab)ELSE DATEDIFF(wk, COURSE_SECTIONS.SEC_START_DATE, COURSE_SECTIONS.SEC_END_DATE)#(lf)#(tab)#(tab)#(tab)END#(lf)#(tab)#(tab)) ""Hours_Per_Week""#(lf)#(tab),COURSE_SECTIONS.SEC_TERM#(lf)#(tab),PERSON.OCCUPATION#(lf)#(tab),replace(EL_GROUP.GROUPS, 'El=', '') ""EMP_LOCATION""#(lf)#(tab),replace(ST_GROUP.GROUPS, 'Stat=', '') ""EMP_STATUS""#(lf)#(tab),replace(JD_GROUP.GROUPS, 'Jd=', '') ""EMP_JOB_DESCRIPTION""#(lf)#(tab),ACTIVE_STUDENTS.ACTIVE_STUDENT_COUNT SEC_ACTIVE_STUDENT_COUNT#(lf)#(tab),COURSE_SEC_FACULTY.CSF_TEACHING_ARRANGEMENT#(lf)#(tab),VALS.VAL_EXTERNAL_REPRESENTATION#(lf)#(tab), ACTIVE_STUDENT_COUNT#(lf)#(tab), COURSE_SECTIONS.COURSE_SECTIONS_ID#(lf)#(tab), Terms.SO#(lf)INTO #Final#(lf)FROM COURSE_SECTIONS #(lf)INNER JOIN SEC_STATUSES on COURSE_SECTIONS.COURSE_SECTIONS_ID = SEC_STATUSES.COURSE_SECTIONS_ID and SEC_STATUSES.POS=1#(lf)INNER JOIN Terms on Terms.TERMS_ID = SEC_TERM#(lf)LEFT JOIN COURSE_SEC_FACULTY ON COURSE_SECTIONS.COURSE_SECTIONS_ID = COURSE_SEC_FACULTY.CSF_COURSE_SECTION#(lf)LEFT JOIN ACTIVE_STUDENTS on ACTIVE_STUDENTS.COURSE_SECTIONS_ID=COURSE_SECTIONS.COURSE_SECTIONS_ID#(lf)LEFT JOIN MAX_SEC_CONTACT SEC_CONTACT on COURSE_SECTIONS.COURSE_SECTIONS_ID =SEC_CONTACT.COURSE_SECTIONS_ID#(lf)LEFT JOIN PERSON ON COURSE_SEC_FACULTY.CSF_FACULTY = PERSON.ID#(lf)LEFT JOIN LAWSON ON COURSE_SEC_FACULTY.CSF_FACULTY = LAWSON.ID#(lf)LEFT JOIN  EL_GROUP ON PERSON.ID = EL_GROUP.ID#(lf)LEFT JOIN  ST_GROUP ON PERSON.ID = ST_GROUP.ID#(lf)LEFT JOIN  JD_GROUP ON PERSON.ID = JD_GROUP.ID#(lf)LEFT JOIN  VALS ON COURSE_SEC_FACULTY.CSF_TEACHING_ARRANGEMENT = VALS.VAL_MINIMUM_INPUT_STRING and VALS.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)#(lf)join LOCATIONS l on l.LOCATIONS_ID = IsNull(COURSE_SECTIONS.SEC_LOCATION, 'ONL')#(lf)join LOCATION_REGIONS LR ON LR.LOCATION_REGIONS_ID = l.LOC_REGION#(lf)WHERE 1 = 1 and COURSE_SEC_FACULTY.CSF_FACULTY <>1050541 and SEC_STATUSES.SEC_STATUS='A'#(lf)#(lf)#(lf)#(lf)SELECT DISTINCT Colleague_ID,Full_Name, #(lf)SEC_LOC, SectionLocation, #(lf)LOCATION_REGIONS_ID, LOCR_DESC,SEC_TERM,EMP_STATUS,EMP_JOB_DESCRIPTION,#(lf)SUM(Hours_Per_Week) OVER (Partition BY Colleague_ID, SEC_TERM, SEC_LOC) Term_Location_TotalHours, SUM(Hours_Per_Week) OVER (Partition BY Colleague_ID, SEC_TERM) As Term_Total_Hours,#(lf) TERM_SO#(lf)--INTO #TotalHours #(lf)FROM (#(lf)#(tab)SELECT DISTINCT #(lf)#(tab)#(tab)Colleague_ID,Full_Name, #(lf)#(tab)#(tab)SEC_LOC, SectionLocation, #(lf)#(tab)#(tab)LOCATION_REGIONS_ID, LOCR_DESC,#(lf)#(tab)#(tab)SEC_NAME Course, #(lf)#(tab)#(tab)SEC_TERM, SO AS TERM_SO,#(lf)#(tab)#(tab)COURSE_SECTIONS_ID, ACTIVE_STUDENT_COUNT, Hours_Per_Week,#(lf)#(tab)#(tab)EMP_LOCATION, ISNULL(EMP_STATUS, 'Unkn') EMP_STATUS,EMP_JOB_DESCRIPTION#(lf)#(tab)FROM #Final) A WHERE Colleague_ID <> '1122928'#(lf)DROP TABLE IF EXISTS #Final;"]),
+				    #"Replaced Value" = Table.ReplaceValue(Source,null,0,Replacer.ReplaceValue,{"Term_Total_Hours"}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Replaced Value", "Term_Total_Hours", "Term_Total_Hours - Copy"),
+				    #"Pivoted Column" = Table.Pivot(Table.TransformColumnTypes(#"Duplicated Column", {{"TERM_SO", type text}}, "en-US"), List.Distinct(Table.TransformColumnTypes(#"Duplicated Column", {{"TERM_SO", type text}}, "en-US")[TERM_SO]), "TERM_SO", "Term_Total_Hours", List.Sum),
+				    #"Renamed Columns" = Table.RenameColumns(#"Pivoted Column",{{"Term_Total_Hours - Copy", "Term_Total_Hours"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"SEC_TERM", "SectionLocation", "LOCATION_REGIONS_ID", "LOCR_DESC", "EMP_STATUS", "Term_Location_TotalHours"}),
+				    #"Grouped Rows" = Table.Group(#"Removed Columns", {"Colleague_ID", "Full_Name", "SEC_LOC", "EMP_JOB_DESCRIPTION"}, {{"1", each List.Min([1]), type nullable number}, {"2", each List.Min([2]), type nullable number}, {"3", each List.Min([3]), type nullable number}, {"4", each List.Min([4]), type nullable number}, {"5", each List.Min([5]), type nullable number}, {"6", each List.Min([6]), type nullable number}, {"7", each List.Min([7]), type nullable number}})
+				in
+				    #"Grouped Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,138 @@
+table 'Operations - HR LY'
+	lineageTag: 5e0615ab-6462-4417-86c5-d0f99d757fd8
+
+	column person_id
+		dataType: string
+		lineageTag: 27924aa9-7af5-4070-b942-78dc1dd2baff
+		summarizeBy: none
+		sourceColumn: person_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column employee_full_name
+		dataType: string
+		lineageTag: 388ae5db-c59a-42fe-89f1-518948681819
+		summarizeBy: none
+		sourceColumn: employee_full_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column email_address
+		dataType: string
+		lineageTag: 84a3d1fa-57fe-4336-baf1-39106cb8cea6
+		summarizeBy: none
+		sourceColumn: email_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column auxillary_status
+		dataType: string
+		lineageTag: d343f47f-ab5a-428c-afbc-29421ceabb56
+		summarizeBy: none
+		sourceColumn: auxillary_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column job_cd
+		dataType: string
+		lineageTag: ec4b7ff3-d8cc-47cc-aeb8-c63eb015c485
+		summarizeBy: none
+		sourceColumn: job_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employee_Type
+		dataType: string
+		lineageTag: 4e61fc42-e73e-4978-9909-3446aabd1eed
+		summarizeBy: none
+		sourceColumn: Employee_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column CAMPUS
+		dataType: string
+		lineageTag: 8c296288-2839-41c0-bfd3-45d77f9f770c
+		summarizeBy: none
+		sourceColumn: CAMPUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CampusLocationDesc
+		dataType: string
+		lineageTag: d8d2cbc5-49c8-4612-b3b1-1076aa1611b8
+		summarizeBy: none
+		sourceColumn: CampusLocationDesc
+
+		annotation SummarizationSetBy = Automatic
+
+	column dept_desc_home_curr
+		dataType: string
+		lineageTag: 4e99a3c0-983f-4a00-a329-f45aa3a2be33
+		summarizeBy: none
+		sourceColumn: dept_desc_home_curr
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_hire_indicator
+		dataType: int64
+		formatString: 0
+		lineageTag: e854d40f-743d-4718-a65e-2b25bf3fe78d
+		summarizeBy: sum
+		sourceColumn: new_hire_indicator
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_hired
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b2a44786-bc18-4705-9213-44a37893e97c
+		summarizeBy: none
+		sourceColumn: date_hired
+
+		variation Variation
+			isDefault
+			relationship: d87f8107-4bdb-4e13-8e0b-3d1640a8e5ac
+			defaultHierarchy: LocalDateTable_ceda02c0-b786-4932-8de9-5ecb8e689d73.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column RecordStartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: adcf4151-0f6e-4779-a59f-a082b123f203
+		summarizeBy: none
+		sourceColumn: RecordStartDate
+
+		variation Variation
+			isDefault
+			relationship: 233fd3a2-ff6a-4bc2-9c0e-f19cf91fa10f
+			defaultHierarchy: LocalDateTable_ec68adc7-1957-499d-b3d8-54e43ba89344.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column RecordEndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0f97dcae-cb69-4303-92d0-0947761b4df3
+		summarizeBy: none
+		sourceColumn: RecordEndDate
+
+		variation Variation
+			isDefault
+			relationship: d5ee5b00-dda2-4dd7-80c9-da395e979cf3
+			defaultHierarchy: LocalDateTable_b90e4b03-2db8-4bf1-8e64-915d60b02957.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Operations - HR LY' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("gln-galendatawarehouse-db1-prod.database.windows.net", "gln-datawarehouse", [Query="DECLARE @LastYearEnd DATE = DATEFROMPARTS(YEAR(GETDATE()) - 1, 12, 31);#(lf)SELECT#(lf)ED.PersonID as person_id,#(lf)ED.EmployeeFullName as employee_full_name,#(lf)ED.EmailAddress as email_address,#(lf)ED.AuxillaryStatus as auxillary_status,#(lf)JD.JobCd as job_cd,#(lf)CASE WHEN JD.JobCd IN (10080, 10081, 10082, 10083, 10085)#(lf)THEN 'Faculty'#(lf)ELSE 'Staff'#(lf)END AS Employee_Type,#(lf)COALESCE(CD.CampusID, 'MAIN') AS CAMPUS,#(lf)COALESCE(CD.CampusLocationDesc, 'MAIN CAMPUS') AS CampusLocationDesc,#(lf)DD.DeptDescHomeCurr as dept_desc_home_curr,#(lf)#(lf)CASE WHEN year(EF.HiredDate) = year(getdate())#(lf)THEN 1#(lf)ELSE 0#(lf)END AS new_hire_indicator,#(lf)EF.HiredDate as date_hired,#(lf)ED.RecordStartDate,#(lf)ED.RecordEndDate#(lf)#(lf)from [dbo].[EmployeeHireFact] EF#(lf)inner join EmployeeDim ED on EF.EmployeeWHKey = ED.EmployeeWHKey --and ED.CurrentInd = 1#(lf) AND  @LastYearEnd BETWEEN ED.RecordStartDate AND ED.RecordEndDate#(lf)left join JobDim JD on EF.JobWHKey = JD.JobWHKey --and JD.CurrentInd = 1#(lf)AND  @LastYearEnd BETWEEN JD.RecordStartDate AND JD.RecordEndDate#(lf)left join DepartmentDim DD on EF.DeptWHKey = DD.DeptWHKey --and DD.CurrentInd = 1#(lf)AND  @LastYearEnd BETWEEN DD.RecordStartDate AND DD.RecordEndDate#(lf)left join SupervisorDim SD on ED.SupervisorWHKey = SD.SupervisorWHKey --and SD.CurrentInd = 1#(lf)AND  @LastYearEnd BETWEEN SD.RecordStartDate AND SD.RecordEndDate#(lf)left JOIN CampusDim CD ON DD.CampusWHKey = CD.CampusWHKey --and CD.CurrentInd = 1#(lf)AND  @LastYearEnd BETWEEN CD.RecordStartDate AND CD.RecordEndDate#(lf)#(lf)where ED.Active = 1 --and EF.CurrentInd = 1#(lf)--and PersonID = '1049491'#(lf)AND  @LastYearEnd BETWEEN EF.RecordStartDate AND EF.RecordEndDate#(lf)"])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

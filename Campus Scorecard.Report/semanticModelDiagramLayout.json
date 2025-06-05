@@ -1,0 +1,723 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1967.3688865952349,
+            "y": 2323.9719301696514
+          },
+          "nodeIndex": "Active Students 2Y",
+          "nodeLineageTag": "e89b717e-4540-410a-ab8c-4e6d43ab5cec",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 898.63474528530048,
+            "y": 2024.5900659027616
+          },
+          "nodeIndex": "Active Students DSET",
+          "nodeLineageTag": "31e67b19-92a2-463a-8d63-187ddc09cb46",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1144.8429293212976,
+            "y": 2177.7598508872879
+          },
+          "nodeIndex": "Active Students LY",
+          "nodeLineageTag": "c9642cd4-f649-4ee5-8db6-acbb4d986534",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1391.9250150335745,
+            "y": 0
+          },
+          "nodeIndex": "Attrition",
+          "nodeLineageTag": "6f79766f-aa6c-4f31-bd3a-7c6f6ec99182",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1330.8948959630843,
+            "y": 1680.8807452476929
+          },
+          "nodeIndex": "Campus Region",
+          "nodeLineageTag": "5e7de442-64fe-4896-9cd8-cd2bed9ea6fe",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2306.7587609741813,
+            "y": 963.432735553758
+          },
+          "nodeIndex": "Clinical Surveys",
+          "nodeLineageTag": "d737e6d0-7518-43c8-880a-a03939dd8f05",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1656.5030877345462,
+            "y": 1676.2330946540183
+          },
+          "nodeIndex": "Cohorts & Graduates",
+          "nodeLineageTag": "10e19dfa-96e1-49bc-bf19-21dbc5020634",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 966.0803472686664,
+            "y": 1231.6177666107242
+          },
+          "nodeIndex": "Cohorts Future Terms",
+          "nodeLineageTag": "05dbfe2b-5197-4240-be2f-cee618d0efff",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 1053.431903607883
+          },
+          "nodeIndex": "Dim Recommend Galen",
+          "nodeLineageTag": "bbeb9bab-fc41-4020-bc85-5fb61a6400e8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5392.2846492575209,
+            "y": 2984.32472742116
+          },
+          "nodeIndex": "Dim Survey Headers",
+          "nodeLineageTag": "2764b20a-a154-4edd-92dc-f33b38d36d4f",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1564.4499160955979,
+            "y": 2801.23490880662
+          },
+          "nodeIndex": "Dim_Date",
+          "nodeLineageTag": "7614945e-603f-4f74-a2c2-0b81141e22f3",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1556.105907958266,
+            "y": 2641.2921551542449
+          },
+          "nodeIndex": "DIM_Ethnicity",
+          "nodeLineageTag": "12f2038c-bd96-42e1-bdd9-339f823f5f35",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 6208.312968729424,
+            "y": 2996.32472742116
+          },
+          "nodeIndex": "DIM_Faculty Load",
+          "nodeLineageTag": "ee8ba65f-5d24-4e7c-bb81-2b7954789900",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1144.8429293212976,
+            "y": 2508.8784844883025
+          },
+          "nodeIndex": "DIM_Gender",
+          "nodeLineageTag": "80336555-b7c2-40af-8438-c90675f00dae",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 611.92230441473657,
+            "y": 2979.1160231766985
+          },
+          "nodeIndex": "DIM_Student_Load",
+          "nodeLineageTag": "8cd0aa63-ef46-42f5-b2d2-dc462f92d750",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5800.2988089934724,
+            "y": 2984.32472742116
+          },
+          "nodeIndex": "DIM_TBA_Headers",
+          "nodeLineageTag": "d0e874e8-bc17-4692-8ec7-c9aa24231002",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 663.7157025670283,
+            "y": 2861.6228351371419
+          },
+          "nodeIndex": "DIM_TBA_Subjects",
+          "nodeLineageTag": "89890618-95a6-4019-a0ea-9559c9a618b6",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2022.0108750867903,
+            "y": 1388.6957141907267
+          },
+          "nodeIndex": "DIM_Terms",
+          "nodeLineageTag": "f1dbc49a-8159-4286-ac47-6fabf9437998",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1233.7889359109058,
+            "y": 477.26297863696846
+          },
+          "nodeIndex": "Enrollment Budget",
+          "nodeLineageTag": "16713cfc-dca5-4f7f-b71f-b1bc1aab1cf3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4984.2704895215693,
+            "y": 2972.32472742116
+          },
+          "nodeIndex": "Ethnicity",
+          "nodeLineageTag": "f6ec824b-6054-482c-bf17-fb0b2b7078db",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3760.2280103137145,
+            "y": 2898.32472742116
+          },
+          "nodeIndex": "FACT_Construction",
+          "nodeLineageTag": "739698b4-1f70-42ab-a647-e96b808fd1b8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4576.2563297856177,
+            "y": 2948.32472742116
+          },
+          "nodeIndex": "FACT_Construction Legend",
+          "nodeLineageTag": "b8ba5243-1c8a-4032-baef-de038c3842e9",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 428.90035341821545,
+            "y": 2384.359856500173
+          },
+          "nodeIndex": "FACT_Faculty Load",
+          "nodeLineageTag": "ea2adb60-7bb3-4ea7-9f98-10fbc53e5061",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1233.7889359109058,
+            "y": 875.47099942015711
+          },
+          "nodeIndex": "FACT_ReAdmits Budget",
+          "nodeLineageTag": "6b9ad5e7-b260-4dd3-a93f-1dff4f376d6c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 487.37176664833191,
+            "y": 1916.7609678770291
+          },
+          "nodeIndex": "FACT_ReAdmits Current",
+          "nodeLineageTag": "21dfbab0-b5d5-4d6d-b142-fd0e7556a739",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1556.105907958266,
+            "y": 2082.1437238846615
+          },
+          "nodeIndex": "FACT_ReAdmits Future",
+          "nodeLineageTag": "7638167f-76eb-45d9-b05b-169d5d01e81c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2378.6318652322034,
+            "y": 2169.7064215774076
+          },
+          "nodeIndex": "FACT_Satisfaction <2024",
+          "nodeLineageTag": "e08a380d-f318-4db1-ab1e-483d67ffaf95",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1645.0519145478743,
+            "y": 426.56547342733029
+          },
+          "nodeIndex": "FACT_Satisfaction >2024",
+          "nodeLineageTag": "803dccfc-36f1-4a3e-b7c7-18faedddb574",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 411.26297863696857,
+            "y": 924.0215151888292
+          },
+          "nodeIndex": "FACT_Student Load",
+          "nodeLineageTag": "1b0707c8-b876-4e19-96d3-5f155cee67c5",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 17.637374781246876,
+            "y": 2106.721295055158
+          },
+          "nodeIndex": "FACT_TBA_Courses",
+          "nodeLineageTag": "5e15e951-197f-4062-a084-cae6dad430fa",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1943.6747189752723,
+            "y": 1081.8263060127606
+          },
+          "nodeIndex": "FACT_Theory Enrollment",
+          "nodeLineageTag": "e6165234-2c72-4709-9e5f-b7fee72e8591",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1666.5811183257483,
+            "y": 911.432735553758
+          },
+          "nodeIndex": "Faculty Load",
+          "nodeLineageTag": "2fcc2179-8871-4b81-a76e-6ba5738e9237",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3059.4596536126792,
+            "y": 1185.0414400381317
+          },
+          "nodeIndex": "Forecasted Drops",
+          "nodeLineageTag": "75261d2d-0b39-4ebd-82b1-f6ea5c80164a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 919.63191732611585,
+            "y": 1575.3270872657929
+          },
+          "nodeIndex": "Goals",
+          "nodeLineageTag": "bd20d7e2-bb62-428b-ac6d-fe25e1385072",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4168.2421700496661,
+            "y": 2898.32472742116
+          },
+          "nodeIndex": "Key_Measure",
+          "nodeLineageTag": "dfe9cd3f-b9d0-4543-966c-eab975d0fc46",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3352.213850577763,
+            "y": 1662.3044186751004
+          },
+          "nodeIndex": "Load Sort",
+          "nodeLineageTag": "30392ce1-1ef9-49ea-9668-f92c4a53935d",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1950.4621954556305,
+            "y": 1707.9072109395743
+          },
+          "nodeIndex": "Main_FacultyHist_AandS",
+          "nodeLineageTag": "9a974f74-32ff-42a3-8293-61d1e5aa68bc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2179.9616832920806,
+            "y": 486.16975691678954
+          },
+          "nodeIndex": "Main_FacultyHist_Nursing",
+          "nodeLineageTag": "907790f2-ada9-42a1-bc42-010bcb941872",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 822.52595727393714,
+            "y": 814.83845535119985
+          },
+          "nodeIndex": "NCLEX",
+          "nodeLineageTag": "88f2fdff-7003-433d-b32f-ee000e28c020",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1153.1869374586295,
+            "y": 2692.65391991464
+          },
+          "nodeIndex": "NCLEX Board Numbers",
+          "nodeLineageTag": "09d1a9c4-4a3e-486c-9e48-fbf0b7ab99dc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 822.52595727393725,
+            "y": 401.83598417612529
+          },
+          "nodeIndex": "New Starts Future Terms LY",
+          "nodeLineageTag": "0a8aedfe-59b5-458c-b5a5-d7d5026cb95a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2715.4425704702189,
+            "y": 2215.260825048219
+          },
+          "nodeIndex": "Official list for IT",
+          "nodeLineageTag": "88ae6a03-b64d-4dda-b556-eddb90f5e93c",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2022.014032568793,
+            "y": 2801.23490880662
+          },
+          "nodeIndex": "Operations - HR",
+          "nodeLineageTag": "7fcd0e6e-6508-4781-9481-48050cec74a1",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 888.08610563052764,
+            "y": 2979.1160231766985
+          },
+          "nodeIndex": "Operations - HR DW",
+          "nodeLineageTag": "69a7dec8-96c5-469c-a6e0-0140df40e1d4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 840.163332055184,
+            "y": 2501.85304453973
+          },
+          "nodeIndex": "Operations - HR LY",
+          "nodeLineageTag": "5e0615ab-6462-4417-86c5-d0f99d757fd8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2789.8948438691718,
+            "y": 2592.9199068312123
+          },
+          "nodeIndex": "Operations_Emails",
+          "nodeLineageTag": "e0b87246-9f47-486d-b7aa-56773e620b86",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1221.1701621661075,
+            "y": 1460.7328119751148
+          },
+          "nodeIndex": "Program Vals",
+          "nodeLineageTag": "d2ffa72b-f5bf-45dc-a976-332e7d8e99fb",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 97.105960052178716,
+            "y": 1473.5510300263286
+          },
+          "nodeIndex": "Qualtrics HCA Clinical",
+          "nodeLineageTag": "d09ca8c5-c160-45e8-96c5-1f576babeff3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2648.1966749757103,
+            "y": 1432.7348677742821
+          },
+          "nodeIndex": "Responses",
+          "nodeLineageTag": "8e796a5c-9e0b-48e4-a5e6-32415e068686",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1255.3181396887796,
+            "y": 1215.2272055601604
+          },
+          "nodeIndex": "Sort",
+          "nodeLineageTag": "80f9b7f7-c060-43c9-8d47-4263bdcb967f",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 508.36893868914729,
+            "y": 1401.0073724168674
+          },
+          "nodeIndex": "Starts Budget",
+          "nodeLineageTag": "d41d6eb2-fd9e-4c10-bec6-e9d63936dbd6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1525.1161809151954,
+            "y": 1352.7339780571256
+          },
+          "nodeIndex": "Students Dropped",
+          "nodeLineageTag": "8e970aaf-2525-4977-9262-d9d9c84fdeb3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2385.1123528180533,
+            "y": 1737.9978464112505
+          },
+          "nodeIndex": "Summarize",
+          "nodeLineageTag": "c99a5026-5e1d-4579-ab8e-4eaab3994dbc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 6492.312968729424,
+            "y": 0
+          },
+          "nodeIndex": "NCLEX Data",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

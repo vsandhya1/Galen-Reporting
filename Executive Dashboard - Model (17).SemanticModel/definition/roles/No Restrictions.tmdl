@@ -1,7 +1,0 @@
-role 'No Restrictions'
-	modelPermission: read
-
-	tablePermission 'Official list for IT'
-
-	annotation PBI_Id = 8942a8e7a4e54a49894d40446abc186c
-

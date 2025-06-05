@@ -1,0 +1,273 @@
+table Main_FacultyHist_Nursing
+	lineageTag: 907790f2-ada9-42a1-bc42-010bcb941872
+
+	measure Nurs_Color =
+			
+			VAR TermsRankNUCY = CALCULATE(Main_FacultyHist_Nursing[Nurs_AttritionFaculty_Count],REMOVEFILTERS(DIM_Terms),Main_FacultyHist_Nursing[TERMS_RANKED] = 1)
+			VAR TermsRankNULY = CALCULATE(Main_FacultyHist_Nursing[Nurs_AttritionFaculty_Count],REMOVEFILTERS(DIM_Terms), Main_FacultyHist_Nursing[TERMS_RANKED] = 5)
+			RETURN
+			SWITCH(TRUE(),TermsRankNUCY<TermsRankNULY,"Green",TermsRankNUCY>TermsRankNULY,"Red","Black")
+		lineageTag: cfb5c88c-2e45-455d-a6ad-bb2d322e95ad
+
+	measure Nurs_AttritionFaculty_Count = CALCULATE(DISTINCTCOUNT(Main_FacultyHist_Nursing[FACULTY_NUMBER]),Main_FacultyHist_Nursing[PREV_TOTAL_ATTR_PERC]>.2)+0
+		formatString: 0
+		lineageTag: f34f86be-a3c3-43db-a154-818a2449b98a
+
+	measure Nurs_AttritionFaculty_Count_Term1 =
+			
+			CALCULATE(
+			    [Nurs_AttritionFaculty_Count],
+			    DIM_Terms[FACULTYATTRITIONTERMS] = 1
+			)
+		formatString: 0
+		lineageTag: 58adf752-73b6-4c3a-954a-b882641f5530
+
+	measure Nurs_AttritionFaculty_Count_Term5 = ```
+			
+			CALCULATE(
+			    [Nurs_AttritionFaculty_Count],
+			    DIM_Terms[FACULTYATTRITIONTERMS] = 5
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c1e3ea85-b89d-463e-894b-2f98dc0d3535
+
+	measure Compare_Font_Color_Nursing = ```
+			
+			IF (
+			    [Nurs_AttritionFaculty_Count_Term1] < [Nurs_AttritionFaculty_Count_Term5],
+			    "Green",
+			    "Red"
+			)
+			
+			```
+		lineageTag: 044732f9-1cf0-49a8-ab47-2384b79c88a1
+
+	column STC_TERM
+		dataType: string
+		lineageTag: fa713543-12ee-4a6b-bea9-04a42a3b8404
+		summarizeBy: none
+		sourceColumn: STC_TERM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ATTR_STC_TERM
+		dataType: string
+		lineageTag: 59037bd1-8d5a-4761-9cdd-0c2bd6a4a86f
+		summarizeBy: none
+		sourceColumn: ATTR_STC_TERM
+
+		annotation SummarizationSetBy = Automatic
+
+	column STC_COURSE_NAME
+		dataType: string
+		lineageTag: 885536f6-5915-4e30-87cf-9fc093bc3cf1
+		summarizeBy: none
+		sourceColumn: STC_COURSE_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column COURSE_LOCATION_CALC
+		dataType: string
+		lineageTag: a008d1db-a926-4b20-b356-fc6c1aadf28b
+		summarizeBy: none
+		sourceColumn: COURSE_LOCATION_CALC
+
+		annotation SummarizationSetBy = Automatic
+
+	column FACULTY_NUMBER
+		dataType: string
+		lineageTag: 71377a2d-8231-4865-aff0-63dab2603a09
+		summarizeBy: none
+		sourceColumn: FACULTY_NUMBER
+
+		annotation SummarizationSetBy = Automatic
+
+	column FACULTY_NAME
+		dataType: string
+		lineageTag: 74cd4d31-2c6b-48c8-9404-9174126cf3fc
+		summarizeBy: none
+		sourceColumn: FACULTY_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column FAC_TYPE
+		dataType: string
+		lineageTag: 4e25d146-554a-4972-b62b-b9fc9c1713b0
+		summarizeBy: none
+		sourceColumn: FAC_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column SECTIONS
+		dataType: string
+		lineageTag: a8a988fe-ae45-41d2-b15b-5f0af3cdce72
+		summarizeBy: none
+		sourceColumn: SECTIONS
+
+		annotation SummarizationSetBy = Automatic
+
+	column COURSE_SECTIONS_ID
+		dataType: string
+		lineageTag: 4898f1d9-231e-4376-9106-89efd3f1c5d9
+		summarizeBy: none
+		sourceColumn: COURSE_SECTIONS_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SECTION_COUNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b8fa806-5224-4cf8-9221-095fdd454a09
+		summarizeBy: sum
+		sourceColumn: SECTION_COUNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENROLLED
+		dataType: double
+		lineageTag: 537835de-ed13-40b7-92a8-362dae6288db
+		summarizeBy: sum
+		sourceColumn: ENROLLED
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PASSED
+		dataType: int64
+		formatString: 0
+		lineageTag: 17112667-b003-4fb6-af71-669177a887e8
+		summarizeBy: sum
+		sourceColumn: PASSED
+
+		annotation SummarizationSetBy = Automatic
+
+	column FAILED
+		dataType: int64
+		formatString: 0
+		lineageTag: 0734ab62-f1a6-480e-80ca-c85a47478cb0
+		summarizeBy: sum
+		sourceColumn: FAILED
+
+		annotation SummarizationSetBy = Automatic
+
+	column FAIL_PERC
+		dataType: double
+		lineageTag: a89f4f98-1fa4-43bd-81a0-b6049b3bf7bb
+		summarizeBy: sum
+		sourceColumn: FAIL_PERC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FAIL_PERC_ROUNDED
+		dataType: string
+		lineageTag: 8c1ca02c-c95e-4e5b-bd19-55fd1649eaf1
+		summarizeBy: none
+		sourceColumn: FAIL_PERC_ROUNDED
+
+		annotation SummarizationSetBy = Automatic
+
+	column DROPPED
+		dataType: int64
+		formatString: 0
+		lineageTag: 182bb582-3a90-4867-ab43-39ad37f0bd21
+		summarizeBy: sum
+		sourceColumn: DROPPED
+
+		annotation SummarizationSetBy = Automatic
+
+	column DROP_PERC
+		dataType: double
+		lineageTag: e591d51c-ec44-4b59-8558-44e5d099b5c9
+		summarizeBy: sum
+		sourceColumn: DROP_PERC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DROP_PERC_ROUNDED
+		dataType: string
+		lineageTag: 7a51c843-3687-4d15-8d93-293ca3dd8933
+		summarizeBy: none
+		sourceColumn: DROP_PERC_ROUNDED
+
+		annotation SummarizationSetBy = Automatic
+
+	column TOTAL_ATTRITION
+		dataType: int64
+		formatString: 0
+		lineageTag: 68b311c6-6e28-4a77-85c6-7f63469b092c
+		summarizeBy: sum
+		sourceColumn: TOTAL_ATTRITION
+
+		annotation SummarizationSetBy = Automatic
+
+	column TOTAL_ATTR_PERC
+		dataType: double
+		lineageTag: ed46213a-5d22-4ecf-be27-1e84471173e0
+		summarizeBy: sum
+		sourceColumn: TOTAL_ATTR_PERC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TOTAL_ATTR_PERC_ROUNDED
+		dataType: double
+		lineageTag: b3e9d7bc-c902-443c-8b22-510ced3c01e0
+		summarizeBy: sum
+		sourceColumn: TOTAL_ATTR_PERC_ROUNDED
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PREV_TOTAL_ATTR_PERC
+		dataType: double
+		lineageTag: 5c20de80-f4fe-4239-b2d7-6bc1c5107b8d
+		summarizeBy: sum
+		sourceColumn: PREV_TOTAL_ATTR_PERC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TERMS_RANKED
+		dataType: int64
+		formatString: 0
+		lineageTag: 37f446af-28bc-497f-a6f2-5b50070bcc2a
+		summarizeBy: sum
+		sourceColumn: TERMS_RANKED
+
+		annotation SummarizationSetBy = Automatic
+
+	column ATTR_STC_TERMS = LEFT([ATTR_STC_TERM],7)
+		lineageTag: 01cda8cd-8100-4989-bcc6-73e1fe5870ed
+		summarizeBy: none
+		sortByColumn: TERMS_RANKED
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Main_FacultyHist_Nursing = m
+		mode: import
+		queryGroup: Academics
+		source =
+				let
+				     Source = Sql.Database("rpt2-prod.ec.galencollege.edu", "coll18_repl_production", [Query="#(lf)/*###############################################################################################################################(lf)#(tab)Gathering Student Program information with date ranges for each student that they were active.#(lf)#(lf)#(tab)Change for Executive Dashboard - Evaluated each term separately, the code does not only return teacher's past attrition rate#(lf)#(tab)just for the class being taught in the most recent term like the IE Power BI Report.#(lf)################################################################################################################################*/#(lf)#(lf)#(lf)DROP TABLE IF EXISTS #STUDENT_PROGRAM;#(lf)#(lf)SELECT DISTINCT#(tab)#(lf)SP.STUDENT_PROGRAMS_ID,#(lf)LEFT(SP.STUDENT_PROGRAMS_ID, 7)  AS STUDENT_ID, #(lf)substring(SP.STUDENT_PROGRAMS_ID, 9,30) AS PROGRAM_ID, #(lf)D.STPR_START_DATE, #(lf)D.STPR_END_DATE,#(lf)ROW_NUMBER() OVER(PARTITION BY SP.STUDENT_PROGRAMS_ID ORDER BY D.STPR_START_DATE DESC) AS  MOST_RECENT_PROGRAM,#(lf)SP.STPR_CATALOG,#(lf)SP.STPR_LOCATION#(lf)INTO #STUDENT_PROGRAM#(lf)FROM [coll18_repl_production].dbo.STUDENT_PROGRAMS SP#(lf)LEFT JOIN STPR_DATES D ON SP.STUDENT_PROGRAMS_ID = D.STUDENT_PROGRAMS_ID#(lf)WHERE SUBSTRING(SP.STUDENT_PROGRAMS_ID, 9,30)  NOT IN ('UNDETERMINED')#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)DROP TABLE IF EXISTS #TEMPDATE;#(lf)#(lf)SELECT STUDENT_PROGRAMS_ID AS SID, #(lf)LEFT(STUDENT_PROGRAMS_ID, 7)  AS STUDENT_ID, #(lf)substring(STUDENT_PROGRAMS_ID, 9,30) AS PROGRAM_ID,#(lf)CAST(STPR_START_DATE AS DATE) AS STPR_START_DATE, CAST(ISNULL(STPR_END_DATE,'12/31/2050') AS DATE)  AS STPR_END_DATE, STPR_LOCATION,#(lf)ROW_NUMBER() OVER (PARTITION BY STUDENT_PROGRAMS_ID  ORDER BY STUDENT_PROGRAMS_ID, POS) AS DATEPOS#(lf)INTO #TEMPDATE#(lf)FROM STPR_DATES#(lf)JOIN ( SELECT DISTINCT STUDENT_PROGRAMS_ID AS SID FROM STPR_STATUSES WHERE STPR_STATUS = 'A') X1 ON X1.SID = STPR_DATES.STUDENT_PROGRAMS_ID#(lf)JOIN (SELECT DISTINCT STUDENT_PROGRAMS_ID AS SID, STPR_LOCATION FROM STUDENT_PROGRAMS) X2 ON X2.SID = STPR_DATES.STUDENT_PROGRAMS_ID#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)DROP TABLE IF EXISTS #GRAD_STATUS_WITH_DATES;#(lf)#(lf)SELECT SS.STUDENT_PROGRAMS_ID, 'G' AS STPR_STATUS, CAST(STPR_START_DATE AS DATE) AS STPR_START_DATE,  CAST(STPR_END_DATE AS DATE) AS STPR_END_DATE#(lf)INTO #GRAD_STATUS_WITH_DATES#(lf)FROM STPR_STATUSES SS#(lf)JOIN STPR_DATES SD ON SD.STUDENT_PROGRAMS_ID = SS.STUDENT_PROGRAMS_ID AND SD.POS = 1#(lf)WHERE STPR_STATUS = 'G' #(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)DROP TABLE IF EXISTS #PROGRAM_BUCKETS#(lf)#(lf)SELECT #(lf)#(tab)CASE WHEN ProgramTime IS NOT NULL THEN CONCAT(ProgramBucket, ' - ', ProgramTime) ELSE ProgramBucket END AS FULL_PROGRAM_BUCKET,#(lf)#(tab)GENERAL_PROGRAM,#(lf)#(tab)ProgramBucket,#(lf)#(tab)ProgramTime,#(lf)#(tab)ACAD_PROGRAMS_ID#(lf)INTO #PROGRAM_BUCKETS#(lf)FROM (#(lf)#(tab)SELECT #(lf)#(tab)#(tab)CASE#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE 'ADN%' THEN 'ADN'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE 'BSN%' THEN 'BSN'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE '%PN%' OR ACAD_PROGRAMS_ID LIKE '%VN%' THEN 'PN/VN'#(lf)#(tab)#(tab)#(tab)ELSE NULL#(lf)#(tab)#(tab)END AS GENERAL_PROGRAM,#(lf)#(tab)#(tab)CASE#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE 'ADN.BRDG%' OR ACAD_PROGRAMS_ID LIKE 'ADN.ADV%' THEN 'ADN BRIDGE'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE 'ADN.2YR%'  THEN 'ADN 2YR'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID = 'BSN.PRE.BSN' THEN 'BSN Prelicensure'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE '%PN%' THEN 'PN'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE '%VN%' THEN 'VN'#(lf)#(tab)#(tab)END AS ProgramBucket,#(lf)#(tab)#(tab)CASE#(tab)#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE '%DAY%' THEN 'DAY'#(lf)#(tab)#(tab)#(tab)WHEN ACAD_PROGRAMS_ID LIKE '%EVE%' THEN 'EVE'#(lf)#(tab)#(tab)#(tab)ELSE NULL#(lf)#(tab)#(tab)END AS ProgramTime,#(lf)#(tab)#(tab)*#(lf)#(tab)FROM ACAD_PROGRAMS #(lf)#(tab)WHERE 1=1#(tab)#(tab)#(tab)#(lf)#(tab)AND ACPG_TITLE <> 'DO NOT USE' #(lf)#(tab)AND ACAD_PROGRAMS_ID is not null #(lf)) X#(lf)WHERE #(lf)#(tab)ProgramBucket IS NOT NULL#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)DROP TABLE IF EXISTS #STPR_MAIN  #(lf)#(lf)SELECT #(lf)#(tab)TD.*,#(lf)#(tab)PB.*,#(lf)#(tab)tg.TRGP_CRED_TYPES CredType, #(lf)#(tab)ap.ACPG_ACAD_LEVEL,#(lf)#(tab)ROW_NUMBER() OVER (PARTITION BY TD.STUDENT_ID ORDER BY TD.STPR_END_DATE DESC) RN#(lf)INTO #STPR_MAIN#(lf)FROM #TEMPDATE TD#(lf)LEFT JOIN ACAD_PROGRAMS ap ON TD.PROGRAM_ID = ap.ACAD_PROGRAMS_ID#(tab)#(lf)LEFT JOIN TRANSCRIPT_GROUPINGS_LS tg on tg.TRANSCRIPT_GROUPINGS_ID = ap.ACPG_TRANSCRIPT_GROUPING#(tab)#(lf)JOIN #PROGRAM_BUCKETS PB ON TD.PROGRAM_ID = PB.ACAD_PROGRAMS_ID#(lf)WHERE #(lf)#(tab)TD.STPR_START_DATE <> TD.STPR_END_DATE#(lf)#(lf)#(lf)#(lf)/*###############################################################################################################################(lf)#(tab)Creating a temp table and inserting data to store ADN 2YR versus ADN BRDG class comparisons.  #(lf)#(tab)These are hard coded values that were provided by Tracy Ortelli on 4/12/23 and should not change frequently.#(lf)################################################################################################################################*/#(tab)#(lf)#(lf)DROP TABLE IF EXISTS #ADN_MAPPING#(lf)#(lf)CREATE TABLE #ADN_MAPPING (#(lf)BRIDGE_COURSE VARCHAR(10),#(lf)TWO_YEAR_COURSE VARCHAR(10),#(lf)OH_COURSE VARCHAR(10),#(lf)MERGED_COURSE_NAMES NVARCHAR(52) #(lf))#(lf)#(lf)INSERT INTO #ADN_MAPPING#(lf)VALUES#(lf)('PNS-202','PNS-112',NULL,'BRDG PNS-202 VS 2YR PNS-112'),#(lf)('NUR-168',NULL,NULL,NULL),#(lf)('NUR-210','NUR-210','BSL-101','BRDG NUR-210 VS 2YR NUR-210'),#(lf)('NUR-242','NUR-170',NULL,'BRDG NUR-242 VS 2YR NUR-170'),#(lf)('NUR-253','NUR-256',NULL,'BRDG NUR-253 VS 2YR NUR-256'),#(lf)('NUR-254','NUR-230','NUR-231','BRDG NUR-254 VS 2YR NUR-230'),#(lf)('NUR-265','NUR-265',NULL,'BRDG NUR-265 VS 2YR NUR-265'),#(lf)('NUR-282','NUR-282',NULL,'BRDG NUR-282 VS 2YR NUR-282'),#(lf)('NUR-283','NUR-283',NULL,'BRDG NUR-283 VS 2YR NUR-283'),#(lf)(NULL,'NUR-155',NULL,NULL),#(lf)(NULL,'NUR-257',NULL,NULL)#(lf)#(lf)#(lf)#(lf)/*###############################################################################################################################(lf)#(tab)Main Block of the query targeting student course records per term, joining Program information from above. #(lf)#(tab)Multiple steps were required due to some whacky Student Program data.  Temp table #MAIN_PRELIM is capturing the data as #(lf)#(tab)intended but a handful of students have courses in terms outside of their active program date ranges. The rest is to try #(lf)#(tab)and capture the missing program info as much as possible.#(lf)################################################################################################################################*/#(tab)#(lf)#(lf)DROP TABLE IF EXISTS #MAIN_PRELIM #(lf)#(lf)SELECT#(lf)#(tab)SAC.STC_PERSON_ID,#(lf)#(tab)P.FIRST_NAME,#(lf)#(tab)P.LAST_NAME,#(lf)#(tab)T.TERMS_ID,#(lf)#(tab)T.TERM_START_DATE,#(lf)#(tab)T.TERM_END_DATE,#(lf)#(tab)SAC.STC_COURSE_NAME,#(lf)#(tab)CASE#(lf)#(tab)#(tab)WHEN SAC.STC_SUBJECT = 'NU' AND SUBSTRING(SAC.STC_SECTION_NO,3,1) = 'D' THEN CONCAT(SAC.STC_COURSE_NAME, ' - Day')#(lf)#(tab)#(tab)WHEN SAC.STC_SUBJECT = 'NU' AND  SUBSTRING(SAC.STC_SECTION_NO,3,1) = 'E' THEN CONCAT(SAC.STC_COURSE_NAME, ' - Eve')#(lf)#(tab)#(tab)WHEN AM.OH_COURSE COLLATE SQL_Latin1_General_CP1_CI_AS IS NOT NULL THEN AM.TWO_YEAR_COURSE COLLATE SQL_Latin1_General_CP1_CI_AS#(lf)#(tab)#(tab)ELSE SAC.STC_COURSE_NAME#(lf)#(tab)END AS STC_COURSE_NAME_CALC,#(lf)#(tab)SAC.STC_SUBJECT,#(lf)#(tab)SAC.STC_SECTION_NO,#(lf)#(tab)CS.COURSE_SECTIONS_ID,#(lf)#(tab)CONCAT(SAC.STC_COURSE_NAME, '-',SAC.STC_SECTION_NO) AS COURSE_WITH_SEC,#(lf)#(tab)SAC.STC_TITLE,#(lf)#(tab)CASE#(lf)#(tab)#(tab)WHEN SAC.STC_SUBJECT = 'NU' AND SUBSTRING(SAC.STC_SECTION_NO,3,1) = 'D' THEN 'Day'#(lf)#(tab)#(tab)WHEN SAC.STC_SUBJECT = 'NU' AND SUBSTRING(SAC.STC_SECTION_NO,3,1) = 'E' THEN 'Eve'#(lf)#(tab)#(tab)ELSE ' '#(lf)#(tab)END AS COURSE_TIME,#(lf)#(tab)CASE#(lf)#(tab)#(tab)WHEN RIGHT(SAC.STC_COURSE_NAME,1) IN ('L','C') THEN 1 #(lf)#(tab)#(tab)ELSE 0 #(lf)#(tab)END AS LAB_CLIN_FLAG,#(lf)#(tab)CASE#(lf)#(tab)#(tab)WHEN SAC.STC_SUBJECT IN ('PNS','NUR','NSG','NU') OR SAC.STC_COURSE_NAME = 'BSL-101' THEN 1#(lf)#(tab)#(tab)ELSE 0#(lf)#(tab)END AS NURSING_CRS_FLAG,#(lf)#(tab)CS.SEC_FACULTY_INFO,#(lf)#(tab)S.STC_STATUS,#(lf)#(tab)S.POS,#(lf)#(tab)S.STC_STATUS_DATE,#(lf)#(tab)DATEADD(DAY,7,SAC.STC_START_DATE) AS ADD_DROP_DATE,#(lf)#(tab)SAC.STUDENT_ACAD_CRED_ADDDATE,#(lf)#(tab)SAC.STUDENT_ACAD_CRED_CHGDATE,#(lf)#(tab)SAC.STC_VERIFIED_GRADE_DATE,#(lf)#(tab)SAC.STC_ATT_CRED,#(lf)#(tab)SAC.STC_CMPL_CRED,#(lf)#(tab)CS.SEC_LOCATION,#(lf)#(tab)SCS.SCS_LOCATION,#(lf)#(tab)SP.STPR_LOCATION,#(lf)#(tab)CASE #(lf)#(tab)#(tab)WHEN CS.SEC_LOCATION IS NOT NULL THEN CS.SEC_LOCATION#(lf)#(tab)#(tab)WHEN SCS.SCS_LOCATION IS NOT NULL THEN SCS.SCS_LOCATION#(lf)#(tab)#(tab)WHEN SP.STPR_LOCATION IS NOT NULL THEN SP.STPR_LOCATION#(lf)#(tab)#(tab)ELSE NULL#(lf)#(tab)END AS COURSE_LOCATION,#(lf)#(tab)CASE #(lf)#(tab)#(tab)WHEN CS.SEC_LOCATION IS NOT NULL THEN CS.SEC_LOCATION#(lf)#(tab)#(tab)WHEN SCS.SCS_LOCATION IS NOT NULL THEN SCS.SCS_LOCATION#(lf)#(tab)#(tab)WHEN SP.STPR_LOCATION IS NOT NULL THEN SP.STPR_LOCATION#(lf)#(tab)#(tab)ELSE NULL#(lf)#(tab)END AS COURSE_LOCATION_CALC,#(lf)#(tab)SP.PROGRAM_ID,#(lf)#(tab)SP.GENERAL_PROGRAM,#(lf)#(tab)SP.FULL_PROGRAM_BUCKET,#(lf)#(tab)SP.ProgramBucket,#(lf)#(tab)SP.ProgramTime,#(lf)#(tab)SP.STPR_START_DATE,#(lf)#(tab)SP.STPR_END_DATE,#(lf)#(tab)CASE WHEN SP.PROGRAM_ID IS NULL THEN 1 ELSE NULL END AS PRGM_LOGIC_IS_FLG,#(lf)#(tab)AM.BRIDGE_COURSE,#(lf)#(tab)AM.TWO_YEAR_COURSE,#(lf)#(tab)AM.OH_COURSE,#(lf)#(tab)AM.MERGED_COURSE_NAMES,#(lf)#(tab)FGL.GRD_GRADE AS VERIFIED_FINAL_LETTER_GRADE,#(lf)#(tab)FGL.GRD_LEGEND AS VERIFIED_FINAL_LETTER_LEGEND,#(lf)#(tab)FGN.GRD_GRADE AS VERIFIED_FINAL_NUM_GRADE,#(lf)#(tab)FGN.GRD_LEGEND AS VERIFIED_FINAL_NUM_LEGEND,#(lf)#(tab)MG.GRD_GRADE AS MIDTERM_NUM_GRADE,#(lf)#(tab)MG.GRD_LEGEND AS MIDTERM_NUM_LEGEND,#(lf)#(tab)CASE WHEN FGL.GRD_GRADE IN ('A+','A','A-','B+','B','B-','C+','C','C-','S') THEN 1 ELSE 0 END AS PASSED,#(lf)#(tab)CASE WHEN FGL.GRD_GRADE IN ('F','I','U') THEN 1 ELSE 0 END AS FAILED,#(lf)#(tab)CASE WHEN FGL.GRD_GRADE IN ('W','WP','WF','DP','DF')  THEN 1  WHEN S.STC_STATUS IN ('D','W') AND DATEDIFF(DAY,CS.SEC_START_DATE, S.STC_STATUS_DATE) >= 7 THEN 1 ELSE 0 END AS DROPPED,#(lf)#(tab)CAST(1 AS DECIMAL) AS ENROLLED#(lf)INTO #MAIN_PRELIM#(lf)FROM #(lf)#(tab)STUDENT_ACAD_CRED SAC#(lf)JOIN PERSON P ON SAC.STC_PERSON_ID = P.ID#(lf)LEFT JOIN STUDENT_COURSE_SEC SCS ON SAC.STUDENT_ACAD_CRED_ID =  SCS.SCS_STUDENT_ACAD_CRED#(lf)LEFT JOIN COURSE_SECTIONS CS ON SCS.SCS_COURSE_SECTION = CS.COURSE_SECTIONS_ID#(lf)LEFT JOIN COURSES C ON CS.SEC_COURSE = C.COURSES_ID#(lf)LEFT JOIN GRADES MG ON SCS.SCS_MID_TERM_GRADE1 = MG.GRADES_ID --(MID TERM GRADE JOIN)#(lf)LEFT JOIN GRADES FGL ON SAC.STC_VERIFIED_GRADE = FGL.GRADES_ID --(FINAL GRADE LETTER JOIN)#(lf)LEFT JOIN GRADES FGN ON SAC.STC_FINAL_GRADE = FGN.GRADES_ID --(FINAL GRADE NUMERIC JOIN)#(lf)JOIN STC_STATUSES S ON SAC.STUDENT_ACAD_CRED_ID = S.STUDENT_ACAD_CRED_ID AND S.POS = 1#(lf)JOIN CRED_TYPES CT ON SAC.STC_CRED_TYPE = CT.CRED_TYPES_ID#(lf)LEFT JOIN #STPR_MAIN SP on SP.STUDENT_ID = SAC.STC_PERSON_ID AND CT.CRED_TYPES_ID = SP.CredType AND SAC.STC_ACAD_LEVEL = SP.ACPG_ACAD_LEVEL AND SAC.STC_START_DATE >= SP.STPR_START_DATE AND SAC.STC_START_DATE <= SP.STPR_END_DATE#(lf)LEFT JOIN #ADN_MAPPING AM ON (SAC.STC_COURSE_NAME = AM.BRIDGE_COURSE COLLATE SQL_Latin1_General_CP1_CI_AS OR SAC.STC_COURSE_NAME = AM.TWO_YEAR_COURSE COLLATE SQL_Latin1_General_CP1_CI_AS OR SAC.STC_COURSE_NAME = AM.OH_COURSE COLLATE SQL_Latin1_General_CP1_CI_AS)#(lf)JOIN (SELECT TOP 8 TERMS_ID, TERM_START_DATE, TERM_END_DATE #(lf)FROM TERMS#(lf)WHERE TERM_START_DATE <= GETDATE()#(lf)  AND RIGHT(TERMS_ID,1) = 'Q'#(lf)ORDER BY TERM_START_DATE DESC) T ON SAC.STC_TERM = T.TERMS_ID#(lf)WHERE  1=1#(lf)AND CASE WHEN (S.STC_STATUS IN('D','W') AND S.STC_STATUS_DATE <= SAC.STC_START_DATE) OR (S.STC_STATUS IN ('D','W') AND DATEDIFF(DAY,CS.SEC_START_DATE, S.STC_STATUS_DATE) <= 7) THEN 1 ELSE 0 END <> 1#(lf)AND S.STC_STATUS NOT IN ('X','DR','T','TR')#(lf)#(lf)DROP TABLE IF EXISTS #NULL_PROGRAM_STUDENTS#(lf)#(lf)SELECT DISTINCT#(lf)STC_PERSON_ID, TERM_START_DATE#(lf)INTO #NULL_PROGRAM_STUDENTS#(lf)FROM #(lf)#(tab)#MAIN_PRELIM#(lf)WHERE PROGRAM_ID IS NULL#(lf)#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)DROP TABLE IF EXISTS #CORRECT_NULL_PROGRAM_STUDENTS#(lf)SELECT DISTINCT#(lf)#(tab)X1.STC_PERSON_ID,#(lf)#(tab)X1.TERM_START_DATE,#(lf)#(tab)X1.PROGRAM_ID,#(lf)#(tab)PB.GENERAL_PROGRAM,#(lf)#(tab)PB.FULL_PROGRAM_BUCKET,#(lf)#(tab)PB.ProgramBucket,#(lf)#(tab)PB.ProgramTime,#(lf)#(tab)X1.STPR_LOCATION#(lf)INTO #CORRECT_NULL_PROGRAM_STUDENTS#(lf)FROM (#(lf)#(tab)#(tab)SELECT #(lf)#(tab)#(tab)#(tab)NPS.STC_PERSON_ID,#(lf)#(tab)#(tab)#(tab)SUBSTRING(SP.STUDENT_PROGRAMS_ID, 9,30) AS PROGRAM_ID,#(lf)#(tab)#(tab)#(tab)SP.STPR_LOCATION,#(lf)#(tab)#(tab)#(tab)SD.STPR_START_DATE,#(lf)#(tab)#(tab)#(tab)SD.STPR_END_DATE,#(lf)#(tab)#(tab)#(tab)NPS.TERM_START_DATE,#(lf)#(tab)#(tab)#(tab)DATEDIFF(DAY,ISNULL(SD.STPR_END_DATE,GETDATE()),NPS.TERM_START_DATE) AS DATE_CHECK,#(lf)#(tab)#(tab)#(tab)ROW_NUMBER() OVER (PARTITION BY NPS.STC_PERSON_ID ORDER BY SD.STPR_START_DATE) PGRM_RN#(lf)#(tab)#(tab)FROM #(lf)#(tab)#(tab)#(tab)#NULL_PROGRAM_STUDENTS NPS#(lf)#(tab)#(tab)JOIN STUDENT_PROGRAMS SP ON NPS.STC_PERSON_ID = LEFT(SP.STUDENT_PROGRAMS_ID,7)#(lf)#(tab)#(tab)JOIN STPR_DATES SD ON LEFT(SP.STUDENT_PROGRAMS_ID,7) = LEFT(SD.STUDENT_PROGRAMS_ID,7) AND SUBSTRING(SP.STUDENT_PROGRAMS_ID, 9,30) = SUBSTRING(SD.STUDENT_PROGRAMS_ID, 9,30) AND SD.POS = 1#(lf)#(tab)) X1#(lf)JOIN (#(lf)#(tab)SELECT #(lf)#(tab)#(tab)NPS.STC_PERSON_ID,#(lf)#(tab)#(tab)MIN(DATEDIFF(DAY,ISNULL(SD.STPR_END_DATE,GETDATE()),NPS.TERM_START_DATE)) AS MIN_DATE_CHECK,#(lf)#(tab)#(tab)NPS.TERM_START_DATE#(lf)#(tab)FROM #(lf)#(tab)#(tab)#NULL_PROGRAM_STUDENTS NPS#(lf)#(tab)JOIN STUDENT_PROGRAMS SP ON NPS.STC_PERSON_ID = LEFT(SP.STUDENT_PROGRAMS_ID,7)#(lf)#(tab)JOIN STPR_DATES SD ON LEFT(SP.STUDENT_PROGRAMS_ID,7) = LEFT(SD.STUDENT_PROGRAMS_ID,7) AND SUBSTRING(SP.STUDENT_PROGRAMS_ID, 9,30) = SUBSTRING(SD.STUDENT_PROGRAMS_ID, 9,30) AND SD.POS = 1#(lf)#(tab)WHERE DATEDIFF(DAY,ISNULL(SD.STPR_END_DATE,GETDATE()),NPS.TERM_START_DATE) >= 0#(lf)#(tab)GROUP BY #(lf)#(tab)#(tab)NPS.STC_PERSON_ID,#(lf)#(tab)#(tab)NPS.TERM_START_DATE#(lf)) X2 ON X1.STC_PERSON_ID = X2.STC_PERSON_ID AND X1.TERM_START_DATE = X2.TERM_START_DATE AND X1.DATE_CHECK = X2.MIN_DATE_CHECK#(lf)LEFT JOIN #PROGRAM_BUCKETS PB ON X1.PROGRAM_ID = PB.ACAD_PROGRAMS_ID#(lf)#(lf)#(lf)/*##################################################################################################################################################(lf)#(tab)Final step of the standard query is combining the students with missing program information and is joining to the corrected program info.#(lf)###################################################################################################################################################*/#(lf)#(lf)#(lf)DROP TABLE IF EXISTS #MAIN#(lf)SELECT #(lf)#(tab)MP.STC_PERSON_ID,#(lf)#(tab)MP.FIRST_NAME,#(lf)#(tab)MP.LAST_NAME,#(lf)#(tab)MP.TERMS_ID AS STC_TERM,#(lf)#(tab)MP.TERM_START_DATE AS STC_TERM_START,#(lf)#(tab)MP.TERM_END_DATE,#(lf)#(tab)MP.STC_COURSE_NAME,#(lf)#(tab)MP.STC_COURSE_NAME_CALC,#(lf)#(tab)MP.STC_SUBJECT,#(lf)#(tab)MP.STC_SECTION_NO,#(lf)#(tab)MP.COURSE_SECTIONS_ID,#(lf)#(tab)MP.COURSE_WITH_SEC,#(lf)#(tab)MP.STC_TITLE,#(lf)#(tab)MP.COURSE_TIME,#(lf)#(tab)MP.LAB_CLIN_FLAG,#(lf)#(tab)MP.NURSING_CRS_FLAG,#(lf)#(tab)SEC_FACULTY_INFO,#(lf)#(tab)MP.ADD_DROP_DATE,#(lf)#(tab)MP.STUDENT_ACAD_CRED_ADDDATE,#(lf)#(tab)MP.STUDENT_ACAD_CRED_CHGDATE,#(lf)#(tab)MP.STC_VERIFIED_GRADE_DATE,#(lf)#(tab)MP.STC_ATT_CRED,#(lf)#(tab)MP.STC_CMPL_CRED,#(lf)#(tab)MP.SEC_LOCATION,#(lf)#(tab)MP.SCS_LOCATION,#(lf)#(tab)MP.STPR_LOCATION,#(lf)#(tab)MP.COURSE_LOCATION,#(lf)#(tab)MP.COURSE_LOCATION_CALC,#(lf)#(tab)CASE WHEN MP.PROGRAM_ID IS NULL THEN NPS.PROGRAM_ID ELSE MP.PROGRAM_ID END AS PROGRAM_ID,#(lf)#(tab)CASE WHEN MP.GENERAL_PROGRAM IS NULL THEN NPS.GENERAL_PROGRAM ELSE MP.GENERAL_PROGRAM END AS GENERAL_PROGRAM,#(lf)#(tab)CASE WHEN MP.FULL_PROGRAM_BUCKET IS NULL THEN NPS.FULL_PROGRAM_BUCKET ELSE MP.FULL_PROGRAM_BUCKET END AS FULL_PROGRAM_BUCKET,#(lf)#(tab)CASE WHEN MP.ProgramBucket IS NULL THEN NPS.ProgramBucket ELSE MP.ProgramBucket END AS ProgramBucket,#(lf)#(tab)CASE WHEN MP.ProgramTime IS NULL THEN NPS.ProgramTime ELSE MP.ProgramTime END AS ProgramTime,#(lf)#(tab)MP.STPR_START_DATE,#(lf)#(tab)MP.STPR_END_DATE,#(lf)#(tab)MP.PRGM_LOGIC_IS_FLG,#(lf)#(tab)MP.BRIDGE_COURSE,#(lf)#(tab)MP.TWO_YEAR_COURSE,#(lf)#(tab)MP.OH_COURSE,#(lf)#(tab)MP.MERGED_COURSE_NAMES,#(lf)#(tab)MP.VERIFIED_FINAL_LETTER_GRADE,#(lf)#(tab)MP.VERIFIED_FINAL_LETTER_LEGEND,#(lf)#(tab)MP.VERIFIED_FINAL_NUM_GRADE,#(lf)#(tab)MP.VERIFIED_FINAL_NUM_LEGEND,#(lf)#(tab)MP.MIDTERM_NUM_GRADE,#(lf)#(tab)MP.MIDTERM_NUM_LEGEND,#(lf)#(tab)MP.PASSED,#(lf)#(tab)MP.FAILED,#(lf)#(tab)MP.DROPPED,#(lf)#(tab)MP.ENROLLED#(lf)INTO #MAIN#(lf)FROM #(lf)#(tab)#MAIN_PRELIM MP#(lf)LEFT JOIN #CORRECT_NULL_PROGRAM_STUDENTS NPS ON MP.STC_PERSON_ID = NPS.STC_PERSON_ID AND MP.TERM_START_DATE = NPS.TERM_START_DATE#(lf)WHERE (MP.PROGRAM_ID IS NOT NULL OR NPS.PROGRAM_ID IS NOT NULL)#(lf)#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)#(lf)/*###############################################################################################################################(lf)Additional logic from main query to aggregrate by term, campus, program, course, then primary instructor. **Note: If there are multiple primary instructors,#(lf)#(tab)student attrition numbers will be duplicated.**#(lf)#(tab)Also re-joining multiple times to target previous semesters.#(lf)################################################################################################################################*/#(lf)#(lf)#(lf)/*##################################################################(lf)#(tab)Initial Aggregration at course-sec level#(lf)###################################################################*/#(lf)#(lf)DROP TABLE IF EXISTS #MAIN_AGGED#(lf)SELECT #(lf)#(tab)M.STC_TERM,#(lf)#(tab)M.STC_TERM_START,#(lf)#(tab)DENSE_RANK() OVER (ORDER BY M.STC_TERM_START DESC) AS TERMS_RANKED,#(lf)#(tab)M.STC_COURSE_NAME,#(lf)#(tab)M.COURSE_WITH_SEC,#(lf)#(tab)M.STC_SECTION_NO,#(lf)#(tab)M.COURSE_SECTIONS_ID,#(lf)#(tab)M.COURSE_LOCATION_CALC,#(lf)#(tab)--M.FULL_PROGRAM_BUCKET,#(lf)#(tab)SUM(M.PASSED) AS PASSED,#(lf)#(tab)SUM(M.FAILED) AS FAILED,#(lf)#(tab)SUM(M.DROPPED) AS DROPPED,#(lf)#(tab)SUM(ENROLLED) AS ENROLLED#(lf)INTO #MAIN_AGGED#(lf)FROM #MAIN M#(lf)WHERE #(lf)#(tab)M.LAB_CLIN_FLAG = 0#(lf)AND M.NURSING_CRS_FLAG = 1#(lf)GROUP BY#(lf)#(tab)M.STC_TERM,#(lf)#(tab)M.STC_TERM_START,#(lf)#(tab)M.STC_COURSE_NAME,#(lf)#(tab)M.COURSE_WITH_SEC,#(lf)#(tab)M.STC_SECTION_NO,#(lf)#(tab)M.COURSE_SECTIONS_ID,#(lf)#(tab)M.COURSE_LOCATION_CALC#(lf)#(tab)--M.FULL_PROGRAM_BUCKET#(lf)#(lf)/*###############################################################################################################################(lf)#(tab)Final Agg grouping 1 or more sections per professor per term.#(lf)################################################################################################################################*/#(lf)#(lf)DROP TABLE IF EXISTS #NEW_MAIN#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)INTO #NEW_MAIN#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 1#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 2#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 3#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 4#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 5#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 6#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 7#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)#(tab)---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#(lf)#(lf)UNION ALL#(lf)#(lf)SELECT #(lf)#(tab)MA.STC_TERM,#(lf)#(tab)CONCAT(MA.STC_TERM, ' Attr %') as ATTR_STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY AS FACULTY_NUMBER,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME) AS FACULTY_NAME,#(lf)#(tab)CASE WHEN MIN(PLS.GROUPS) LIKE '%ft' THEN 'full-time' WHEN MIN(PLS.GROUPS) LIKE '%pt' THEN 'part-time' WHEN MIN(PLS.GROUPS) LIKE '%prn' THEN 'part-time' ELSE NULL END AS FAC_TYPE,#(lf)#(tab)STRING_AGG(MA.STC_SECTION_NO,' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) AS SECTIONS, #(lf)#(tab)STRING_AGG(CAST(COURSE_SECTIONS_ID as varchar(8)), ' || ') WITHIN GROUP (ORDER BY MA.STC_SECTION_NO) COURSE_SECTIONS_ID,#(lf)#(tab)COUNT(*) AS SECTION_COUNT,#(lf)#(tab)SUM(MA.ENROLLED) AS ENROLLED,#(lf)#(tab)SUM(MA.PASSED) AS PASSED,#(lf)#(tab)SUM(MA.FAILED) AS FAILED,#(lf)#(tab)CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS FAIL_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS FAIL_PERC_ROUNDED,#(lf)#(tab)SUM(MA.DROPPED) AS DROPPED,#(lf)#(tab)CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) AS DROP_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(MA.ENROLLED) AS DECIMAL) *100)/100,5),4) AS DROP_PERC_ROUNDED,#(lf)#(tab)SUM(MA.FAILED) + SUM(MA.DROPPED) AS TOTAL_ATTRITION,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS TOTAL_ATTR_PERC,#(lf)#(tab)LEFT(ROUND(CEILING(CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) *100)/100,5),4) AS TOTAL_ATTR_PERC_ROUNDED,#(lf)#(tab)CAST(SUM(MA.FAILED) + SUM(MA.DROPPED) AS DECIMAL) / CAST(SUM(ENROLLED) AS DECIMAL) AS PREV_TOTAL_ATTR_PERC,#(lf)#(tab)MA.TERMS_RANKED#(lf)FROM #(lf)#(tab)#MAIN_AGGED MA#(lf)LEFT JOIN COURSE_SEC_FACULTY CSF ON MA.COURSE_SECTIONS_ID = CSF.CSF_COURSE_SECTION AND CSF.CSF_TEACHING_ARRANGEMENT IN ('P','H')#(lf)LEFT JOIN PERSON P ON CSF.CSF_FACULTY = P.ID#(lf)LEFT JOIN VALS VF ON TRIM(CSF.CSF_TEACHING_ARRANGEMENT) = TRIM(VF.VAL_INTERNAL_CODE) AND VF.VALCODE_ID = 'TEACHING.ARRANGEMENTS'#(lf)LEFT JOIN PERSON_LS PLS ON P.ID = PLS.ID AND PLS.GROUPS IN ('Stat=ft','Stat=pt','Stat=prn')#(lf)#(lf)WHERE#(lf)#(tab)MA.TERMS_RANKED = 8#(lf)GROUP BY#(lf)#(tab)MA.STC_TERM,#(lf)#(tab)MA.STC_COURSE_NAME,#(lf)#(tab)MA.COURSE_LOCATION_CALC,#(lf)#(tab)CSF.CSF_FACULTY,#(lf)#(tab)CONCAT(P.LAST_NAME,', ', P.FIRST_NAME),#(lf)#(tab)--PLS.GROUPS,#(lf)#(tab)MA.TERMS_RANKED#(lf)#(lf)#(lf)DROP TABLE IF EXISTS #STUDENT_PROGRAM#(lf)DROP TABLE IF EXISTS #TEMPSTAT#(lf)DROP TABLE IF EXISTS #ACTIVE_STATUS_WITH_DATES#(lf)DROP TABLE IF EXISTS #STPR_STATUS_HIST#(lf)DROP TABLE IF EXISTS #PROGRAM_BUCKETS#(lf)DROP TABLE IF EXISTS #STPR_MAIN#(lf)DROP TABLE IF EXISTS #ADN_MAPPING#(lf)DROP TABLE IF EXISTS #MAIN_PRELIM#(lf)DROP TABLE IF EXISTS #NULL_PROGRAM_STUDENTS#(lf)DROP TABLE IF EXISTS #CORRECT_NULL_PROGRAM_STUDENTS#(lf)DROP TABLE IF EXISTS #MAIN#(lf)DROP TABLE IF EXISTS #MAIN_AGGED#(lf)#(lf)#(lf)#(lf)#(lf)#(tab)SELECT * FROM #NEW_MAIN"]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"TOTAL_ATTR_PERC_ROUNDED", Currency.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

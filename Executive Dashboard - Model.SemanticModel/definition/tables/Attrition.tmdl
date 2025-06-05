@@ -1,0 +1,136 @@
+table Attrition
+	lineageTag: 6f79766f-aa6c-4f31-bd3a-7c6f6ec99182
+
+	measure Current_Month_Attrition_Budget = ```
+			
+			var currentyear = YEAR(TODAY())
+			var currentMonth= MONTH(TODAY())
+			VAR FINAL = CALCULATE(SUM(Attrition[ABS_Value]),
+			YEAR(Attrition[Date])= currentyear,
+			MONTH(Attrition[Date])= currentMonth)
+			RETURN  
+			IF(FINAL=BLANK(),0,FINAL)
+			```
+		formatString: #,0
+		lineageTag: ad886d9c-42bd-4353-a70b-414dd85dee4c
+
+	measure Budget_Drop_Percentage = ```
+			
+			var A = ([CurrentTermDR]) - [Current_Month_Attrition_Budget]
+			
+			RETURN
+			    IF(
+			        ('Students Dropped'[CurrentTermDR]) > [Current_Month_Attrition_Budget],             
+			        CONCATENATE("+", FORMAT(DIVIDE(A,[Current_Month_Attrition_Budget],0), "0.00%")),      
+			        CONCATENATE("-", FORMAT(ABS(DIVIDE(A,[Current_Month_Attrition_Budget],0)), "0.00%"))   
+			    )
+			```
+		lineageTag: ced07e11-8d9d-4eed-bd3e-f789f3d14c5e
+
+	measure AttritionFlag = IF('Students Dropped'[CurrentTermDR]>[Current_Month_Attrition_Budget], UNICHAR(9650), UNICHAR(9660))
+		lineageTag: 10b0930d-63f7-4417-a172-0a25cff642ef
+
+	measure AttritionColorCode = IF('Students Dropped'[CurrentTermDR]>[Current_Month_Attrition_Budget], "#C81515", "#00B050")
+		lineageTag: 57095395-066b-4591-afe6-e2f9f91aae7f
+
+	column Campus
+		dataType: string
+		lineageTag: a0d0e1da-42e2-4f57-b03c-1c9f9e4231b6
+		summarizeBy: none
+		sourceColumn: Campus
+
+		annotation SummarizationSetBy = Automatic
+
+	column Program
+		dataType: string
+		lineageTag: 0c1575e8-361a-470c-8e88-e215abcb31b2
+		summarizeBy: none
+		sourceColumn: Program
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'HCA Indicator'
+		dataType: string
+		lineageTag: 7e7122bf-024b-4885-9fa7-2adf00520e65
+		summarizeBy: none
+		sourceColumn: HCA Indicator
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 843defcc-8c79-41f5-ab54-4300a5a884e7
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Name
+		dataType: string
+		lineageTag: 06291a30-1769-4e9b-8641-26ac66e34dae
+		summarizeBy: none
+		sourceColumn: Month_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: int64
+		formatString: 0
+		lineageTag: 005c2c58-5497-465e-9499-30b9e3d2c071
+		summarizeBy: sum
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_No = SWITCH(Attrition[Month_Name], "January",1, "February",2, "March",3, "April",4, "May",5, "June",6, "July",7, "August",8, "September", 9, "October",10, "November",11, "December",12)
+		formatString: 0
+		lineageTag: 3e151a48-6b28-44c2-8c8b-2448e05080fd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date = DATE(Attrition[Year],Attrition[Month_No],01)
+		formatString: General Date
+		lineageTag: 89fb5138-b702-4c49-8cc2-a8b33f7ed879
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 6b6cb168-8772-458b-91ad-57991bf8338c
+			defaultHierarchy: LocalDateTable_aeb1b489-a9eb-4ede-a736-40dd0a7a063d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ABS_Value = ABS(Attrition[Value])
+		formatString: 0
+		lineageTag: e05e6ace-b797-49d8-902c-48e3ec409551
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Campus_New = LOOKUPVALUE('Campus Region'[LOCATIONS_ID],'Campus Region'[LOCATIONS_ID],[Campus],"OTHER")
+		lineageTag: 52c21e8d-357d-4e30-8763-76ded7de2c9a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Attrition = m
+		mode: import
+		queryGroup: Drops
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://hcahealthcare.sharepoint.com/sites/HTPS-GalenCollaboration/Shared%20Documents/Project%20Folder/Executive%20Dashboards/Student%20Enrollment%20Budget.xlsx"), null, true),
+				    Attrition_Sheet = Source{[Item="Attrition",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Attrition_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Campus", type text}, {"Program", type text}, {"HCA Indicator", type text}, {"January", Int64.Type}, {"February", Int64.Type}, {"March", Int64.Type}, {"April", Int64.Type}, {"May", Int64.Type}, {"June", Int64.Type}, {"July", Int64.Type}, {"August", Int64.Type}, {"September", Int64.Type}, {"October", Int64.Type}, {"November", Int64.Type}, {"December", Int64.Type}, {"Year", Int64.Type}}),
+				    #"Unpivoted Columns" = Table.UnpivotOtherColumns(#"Changed Type", {"Campus", "Program", "HCA Indicator", "Year"}, "Attribute", "Value"),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Unpivoted Columns",{{"Campus", type text}, {"Program", type text}, {"HCA Indicator", type text}, {"Year", Int64.Type}, {"Attribute", type text}, {"Value", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Attribute", "Month_Name"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
